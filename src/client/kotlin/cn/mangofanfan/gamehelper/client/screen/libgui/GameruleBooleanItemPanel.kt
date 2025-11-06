@@ -1,20 +1,21 @@
 package cn.mangofanfan.gamehelper.client.screen.libgui
 
-import io.github.cottonmc.cotton.gui.widget.TooltipBuilder
-import io.github.cottonmc.cotton.gui.widget.WButton
-import io.github.cottonmc.cotton.gui.widget.WLabel
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
+import net.minecraft.util.Colors
 import net.minecraft.world.GameRules
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+@Environment(EnvType.CLIENT)
 class GameruleBooleanItemPanel : WPlainPanel () {
     val logger: Logger = LoggerFactory.getLogger("GameruleBooleanItemPanel")
-    var ruleNameLabel: WLabel? = null
-    var ruleToggleButton: WButton? = null
+    var ruleNameLabel: FLabel? = null
+    var ruleToggleButton: FButton? = null
     var ruleValue: Boolean? = null
         set(value) {
             // 执行gamerule命令
@@ -28,27 +29,27 @@ class GameruleBooleanItemPanel : WPlainPanel () {
             // TODO：检查命令是否执行成功，如果没有成功则不应该更改状态
             field = value
             ruleToggleButton!!.label = Text.literal(if (value == true) "TRUE" else "FALSE")
-                .withColor(if (value == true) 0x00FF00 else 0xFF0000)
+                .withColor(if (value == true) Colors.GREEN else Colors.RED)
         }
 
     // 设置 gamerule
     var rule: GameRules.Key<GameRules.BooleanRule>? = null
         set(value) {
             field = value
-            ruleNameLabel!!.text = Text.translatable(value!!.translationKey)
-            ruleNameLabel!!.addTooltip(TooltipBuilder().add(Text.literal(value.name)))
+            ruleNameLabel!!.text = Text.literal(value!!.name)
+            ruleNameLabel!!.addTooltip(Text.translatable(value.translationKey))
             ruleValue = MinecraftClient.getInstance().server!!.gameRules.getBoolean(value)
         }
 
     init {
         setSize(256, 18)
-        ruleNameLabel = WLabel(Text.literal("TvT"))
+        ruleNameLabel = FLabel(Text.literal("TvT"))
         ruleNameLabel!!.setVerticalAlignment(VerticalAlignment.CENTER)
-        ruleToggleButton = WButton(Text.literal("OvO"))
+        ruleToggleButton = FButton(Text.literal("OvO"))
         ruleToggleButton!!.setOnClick { toggle() }
 
-        add(ruleNameLabel, 0, 0, 200, 18)
-        add(ruleToggleButton, 200, 0, 50, 18)
+        add(ruleNameLabel, 0, 0, 180, 18)
+        add(ruleToggleButton, 180, 0, 50, 18)
     }
 
     fun toggle() {

@@ -1,43 +1,34 @@
 package cn.mangofanfan.gamehelper.client.screen.widget
 
 import cn.mangofanfan.gamehelper.client.screen.libgui.GameruleBooleanItemPanel
+import cn.mangofanfan.gamehelper.client.screen.libgui.GameruleIntItemPanel
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
-import io.github.cottonmc.cotton.gui.widget.WButton
-import io.github.cottonmc.cotton.gui.widget.WGridPanel
-import io.github.cottonmc.cotton.gui.widget.WLabel
 import io.github.cottonmc.cotton.gui.widget.WListPanel
-import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
-import io.github.cottonmc.cotton.gui.widget.data.Insets
-import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
+import io.github.cottonmc.cotton.gui.widget.WTabPanel
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import net.minecraft.world.GameRules
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
+/**
+ * 在游戏内编辑gamerules的屏幕。
+ */
 @Environment(EnvType.CLIENT)
-class GamerulesBooleanDescription(parent: Screen?): LightweightGuiDescription() {
-    val _parent: Screen? = parent
-    val _client: MinecraftClient? = MinecraftClient.getInstance()
-    val logger: Logger = LoggerFactory.getLogger("InGameGamerules")
-    val root = WGridPanel()
-    val backButton = WButton(Text.translatable("gamehelper.screen.back_button"))
-    val titleLabel: WLabel = WLabel(Text.translatable("gamehelper.screen.gamerules_title"))
-        .setHorizontalAlignment(HorizontalAlignment.CENTER)
-        .setVerticalAlignment(VerticalAlignment.CENTER)
-    val descriptionLabel: WLabel = WLabel(Text.translatable("gamehelper.screen.gamerules_description"))
-        .setHorizontalAlignment(HorizontalAlignment.CENTER)
-        .setVerticalAlignment(VerticalAlignment.CENTER)
-    var gamerulesListWidget: WListPanel<GameRules.Key<GameRules.BooleanRule>, GameruleBooleanItemPanel>? = null
+class GamerulesDescription: LightweightGuiDescription() {
+
+    var root = WTabPanel()
+
+    var gamerulesBooleanListWidget: WListPanel<GameRules.Key<GameRules.BooleanRule>, GameruleBooleanItemPanel>? = null
+    var gamerulesIntListWidget: WListPanel<GameRules.Key<GameRules.IntRule>, GameruleIntItemPanel>? = null
 
     // gamerules
-    val gamerulesConfigurator = { gamerule: GameRules.Key<GameRules.BooleanRule>, itemPanel: GameruleBooleanItemPanel ->
-        // 在GameruleItemPanel的rule的setter中设计了封装
+    val gamerulesBooleanConfigurator = { gamerule: GameRules.Key<GameRules.BooleanRule>, itemPanel: GameruleBooleanItemPanel ->
         itemPanel.rule = gamerule
     }
+    val gamerulesIntConfigurator = { gamerule: GameRules.Key<GameRules.IntRule>, itemPanel: GameruleIntItemPanel ->
+        itemPanel.rule = gamerule
+    }
+
     val gamerulesBoolean = listOf(
         GameRules.DO_FIRE_TICK,
         GameRules.ALLOW_FIRE_TICKS_AWAY_FROM_PLAYER,
@@ -89,24 +80,38 @@ class GamerulesBooleanDescription(parent: Screen?): LightweightGuiDescription() 
         GameRules.COMMAND_BLOCKS_ENABLED,
         GameRules.SPAWNER_BLOCKS_ENABLED
     )
+    val gamerulesInt = listOf(
+        GameRules.RANDOM_TICK_SPEED,
+        GameRules.SPAWN_RADIUS,
+        GameRules.MAX_ENTITY_CRAMMING,
+        GameRules.MAX_COMMAND_CHAIN_LENGTH,
+        GameRules.MAX_COMMAND_FORK_COUNT,
+        GameRules.COMMAND_MODIFICATION_BLOCK_LIMIT,
+        GameRules.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY,
+        GameRules.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY,
+        GameRules.PLAYERS_SLEEPING_PERCENTAGE,
+        GameRules.SNOW_ACCUMULATION_HEIGHT,
+        GameRules.MINECART_MAX_SPEED  // Minecraft Max Speed可能获取失败，已经在 GameruleIntItemPanel 中针对获取失败进行额外处理。
+    )
 
     init {
         setRootPanel(root)
         root.setSize(256, 180)
-        root.setInsets(Insets.ROOT_PANEL)
 
-        backButton.setOnClick {
-            _client!!.setScreen(_parent)
+        gamerulesBooleanListWidget = WListPanel(gamerulesBoolean, ::GameruleBooleanItemPanel, gamerulesBooleanConfigurator)
+        gamerulesBooleanListWidget!!.setListItemHeight(18)
+        gamerulesBooleanListWidget!!.parent = root
+        gamerulesBooleanListWidget!!.setSize(240, 180)
+        gamerulesIntListWidget = WListPanel(gamerulesInt, ::GameruleIntItemPanel, gamerulesIntConfigurator)
+        gamerulesIntListWidget!!.setListItemHeight(18)
+        gamerulesIntListWidget!!.parent = root
+        gamerulesIntListWidget!!.setSize(240, 180)
+        root.add(gamerulesBooleanListWidget) { builder ->
+            builder.title(Text.translatable("gamehelper.screen.gamerules_tab.boolean"))
         }
-        gamerulesListWidget = WListPanel(gamerulesBoolean, ::GameruleBooleanItemPanel, gamerulesConfigurator)
-        gamerulesListWidget!!.setListItemHeight(18)
-        gamerulesListWidget!!.validate(this)
-        logger.info("gamerulesListWidget: ${gamerulesBoolean.size}")
-
-        root.add(backButton, 0, 0, 4, 1)
-        root.add(titleLabel, 4, 0, 14, 1)
-        root.add(descriptionLabel, 0, 1, 18, 1)
-        root.add(gamerulesListWidget, 0, 2, 18, 7)
+        root.add(gamerulesIntListWidget) { builder ->
+            builder.title(Text.translatable("gamehelper.screen.gamerules_tab.int"))
+        }
 
         root.validate(this)
     }
