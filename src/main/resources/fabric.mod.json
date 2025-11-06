@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "gamehelper",
+  "version": "${version}",
+  "name": "GameHelper",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/gamehelper/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "cn.mangofanfan.gamehelper.client.GamehelperDataGenerator"
+    ],
+    "client": [
+      "cn.mangofanfan.gamehelper.client.GamehelperClient"
+    ],
+    "main": [
+      "cn.mangofanfan.gamehelper.Gamehelper"
+    ]
+  },
+  "mixins": [
+    "gamehelper.mixins.json",
+    {
+      "config": "gamehelper.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-language-kotlin": ">=${kotlin_loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
