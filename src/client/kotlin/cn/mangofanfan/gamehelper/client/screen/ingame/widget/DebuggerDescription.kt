@@ -1,7 +1,7 @@
-package cn.mangofanfan.gamehelper.client.screen.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
-import cn.mangofanfan.gamehelper.client.screen.libgui.FButton
-import cn.mangofanfan.gamehelper.client.screen.libgui.FLabel
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WListPanel
@@ -26,7 +26,7 @@ class DebuggerDescription : LightweightGuiDescription() {
     /**
      * 调试组合键的列表元素面板
      */
-    class DebuggerItemPanel : WPlainPanel () {
+    class DebuggerItemPanel : WPlainPanel() {
         var keyButton: FButton? = null
         var descriptionLabel: FLabel? = null
         var debuggerItem: DebuggerItem? = null

@@ -4,20 +4,27 @@
   "version": "${version}",
   "name": "GameHelper",
   "description": "",
-  "authors": [],
-  "contact": {},
+  "authors": [
+    "MangoFanFan"
+  ],
+  "contact": {
+    "homepage": "",
+    "email": "fan@fanfan.moe",
+    "sources": "https://github.com/mangofanfan/GameHelper-MinecraftMod",
+    "issues": "https://github.com/mangofanfan/GameHelper-MinecraftMod/issues"
+  },
   "license": "MIT",
   "icon": "assets/gamehelper/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "fabric-datagen": [
-      "cn.mangofanfan.gamehelper.client.GamehelperDataGenerator"
-    ],
     "client": [
-      "cn.mangofanfan.gamehelper.client.GamehelperClient"
+      "cn.mangofanfan.gamehelper.client.GameHelperClient"
     ],
     "main": [
       "cn.mangofanfan.gamehelper.Gamehelper"
+    ],
+    "modmenu": [
+      "cn.mangofanfan.gamehelper.client.GameHelperModMenuApiImpl"
     ]
   },
   "mixins": [
@@ -33,6 +40,7 @@
     "fabric-api": ">=${fabric_version}",
     "fabric": "*",
     "libgui": ">=${libgui_version}",
+    "cloth-config": ">=${cloth_config_version}",
     "minecraft": "${minecraft_version}"
   }
 }

@@ -1,7 +1,7 @@
 package cn.mangofanfan.gamehelper.client
 
-import cn.mangofanfan.gamehelper.client.screen.widget.HelperDescription
-import cn.mangofanfan.gamehelper.client.screen.libgui.InGameScreen
+import cn.mangofanfan.gamehelper.client.screen.ingame.widget.HelperDescription
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class GamehelperClient : ClientModInitializer {
+class GameHelperClient : ClientModInitializer {
     val logger: Logger = LoggerFactory.getLogger("GamehelperClient")
 
     /**

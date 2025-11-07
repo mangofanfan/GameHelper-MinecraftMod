@@ -1,4 +1,8 @@
 {
+  "modmenu.nameTranslation.gamehelper": "Game Helper",
+  "modmenu.descriptionTranslation.gamehelper": "Edit gamerules simply~",
+  "modmenu.summaryTranslation.gamehelper": "Change your gamerules in world, F3 features and get where you dead in a GUI.",
+
   "gamehelper.screen.back_button": "Back",
   "gamehelper.screen.debugger_button": "Debugger",
   "gamehelper.screen.debugger_description": "Show more information in vanilla game. Maybe helpful?",
@@ -23,5 +27,12 @@
   "gamehelper.screen.info_display.1": "You have spent %1$s in this special world!",
   "gamehelper.screen.info_display.2": "You have experienced %1$s deaths in this dangerous world!",
   "gamehelper.screen.info_display.3": "You have passed %1$s on bed in this sweet world!",
+  "gamehelper.screen.config_screen_button": "GameHelper config",
+
+  "gamehelper.screen.config.title": "GameHelper Config",
+  "gamehelper.screen.config.category.general": "General",
+  "gamehelper.screen.config.entry.showGameruleTranslationInGUI": "Show gamerule translation in GUI",
+  "gamehelper.screen.config.entry.showGameruleTranslationInGUI.description": "If false, gamerule name in GUI and translation in tooltip.\nElse, gamerule name in tooltip and translation in GUI.",
+
   "key.gamehelper.open_screen": "Open InGameHelper Screen"
 }

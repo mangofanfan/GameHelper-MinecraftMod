@@ -1,7 +1,8 @@
-package cn.mangofanfan.gamehelper.client.screen.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
-import cn.mangofanfan.gamehelper.client.screen.libgui.FButton
-import cn.mangofanfan.gamehelper.client.screen.libgui.InGameScreen
+import cn.mangofanfan.gamehelper.client.screen.config.HelperConfigScreenBuilder
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
@@ -28,6 +29,7 @@ class HelperDescription(parent: Screen?) : LightweightGuiDescription() {
     val infoDisplayButton = FButton(Text.translatable("gamehelper.screen.info_display.0"))
     val gamerulesButton = FButton(Text.translatable("gamehelper.screen.gamerules_button"))
     val debuggerButton = FButton(Text.translatable("gamehelper.screen.debugger_button"))
+    val configScreenButton = FButton(Text.translatable("gamehelper.screen.config_screen_button"))
 
     // 显示的信息条目
     var infoId = 0
@@ -65,11 +67,15 @@ class HelperDescription(parent: Screen?) : LightweightGuiDescription() {
             ))
         }
         debuggerButton.addTooltip(Text.translatable("gamehelper.screen.debugger_description"))
+        configScreenButton.setOnClick {
+            _client!!.setScreen(HelperConfigScreenBuilder(_client.currentScreen!!).build())
+        }
 
         root.add(backButton, 0, 0, 2, 1)
         root.add(infoDisplayButton, 2, 0, 16, 1)
-        root.add(gamerulesButton, 6, 2, 6, 1)
-        root.add(debuggerButton, 6, 3, 6, 1)
+        root.add(gamerulesButton, 10, 2, 6, 1)
+        root.add(debuggerButton, 10, 3, 6, 1)
+        root.add(configScreenButton, 10, 10, 6, 1)
 
         root.validate(this)
 

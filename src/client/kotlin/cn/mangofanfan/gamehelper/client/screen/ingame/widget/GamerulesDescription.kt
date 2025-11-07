@@ -1,7 +1,7 @@
-package cn.mangofanfan.gamehelper.client.screen.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
-import cn.mangofanfan.gamehelper.client.screen.libgui.GameruleBooleanItemPanel
-import cn.mangofanfan.gamehelper.client.screen.libgui.GameruleIntItemPanel
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.GameruleBooleanItemPanel
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.GameruleIntItemPanel
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.WTabPanel
@@ -98,7 +98,8 @@ class GamerulesDescription: LightweightGuiDescription() {
         setRootPanel(root)
         root.setSize(256, 180)
 
-        gamerulesBooleanListWidget = WListPanel(gamerulesBoolean, ::GameruleBooleanItemPanel, gamerulesBooleanConfigurator)
+        gamerulesBooleanListWidget = WListPanel(gamerulesBoolean,
+            ::GameruleBooleanItemPanel, gamerulesBooleanConfigurator)
         gamerulesBooleanListWidget!!.setListItemHeight(18)
         gamerulesBooleanListWidget!!.parent = root
         gamerulesBooleanListWidget!!.setSize(240, 180)

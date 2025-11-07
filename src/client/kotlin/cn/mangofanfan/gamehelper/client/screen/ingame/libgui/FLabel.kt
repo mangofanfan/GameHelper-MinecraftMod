@@ -1,4 +1,4 @@
-package cn.mangofanfan.gamehelper.client.screen.libgui
+package cn.mangofanfan.gamehelper.client.screen.ingame.libgui
 
 import io.github.cottonmc.cotton.gui.widget.TooltipBuilder
 import io.github.cottonmc.cotton.gui.widget.WLabel

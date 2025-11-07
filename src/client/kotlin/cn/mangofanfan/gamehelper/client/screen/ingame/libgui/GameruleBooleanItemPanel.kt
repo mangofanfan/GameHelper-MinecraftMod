@@ -1,5 +1,6 @@
-package cn.mangofanfan.gamehelper.client.screen.libgui
+package cn.mangofanfan.gamehelper.client.screen.ingame.libgui
 
+import cn.mangofanfan.gamehelper.client.screen.config.ConfigManager
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
 import net.fabricmc.api.EnvType
@@ -12,7 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @Environment(EnvType.CLIENT)
-class GameruleBooleanItemPanel : WPlainPanel () {
+class GameruleBooleanItemPanel : WPlainPanel() {
     val logger: Logger = LoggerFactory.getLogger("GameruleBooleanItemPanel")
     var ruleNameLabel: FLabel? = null
     var ruleToggleButton: FButton? = null
@@ -36,8 +37,14 @@ class GameruleBooleanItemPanel : WPlainPanel () {
     var rule: GameRules.Key<GameRules.BooleanRule>? = null
         set(value) {
             field = value
-            ruleNameLabel!!.text = Text.literal(value!!.name)
-            ruleNameLabel!!.addTooltip(Text.translatable(value.translationKey))
+            // 根据配置决定显示模式
+            if (ConfigManager.getInstance().config.showGameruleTranslationInGUI) {
+                ruleNameLabel!!.text = Text.translatable(value!!.translationKey)
+                ruleNameLabel!!.addTooltip(Text.literal(value.name))
+            } else {
+                ruleNameLabel!!.text = Text.literal(value!!.name)
+                ruleNameLabel!!.addTooltip(Text.translatable(value.translationKey))
+            }
             ruleValue = MinecraftClient.getInstance().server!!.gameRules.getBoolean(value)
         }
 

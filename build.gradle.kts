@@ -51,6 +51,13 @@ repositories {
         name = "CottonMC"
         url = uri("https://server.bbkr.space/artifactory/libs-release")
     }
+    maven {
+        url = uri("https://maven.shedaniel.me/")
+    }
+    maven {
+        name = "Terraformers"
+        url = uri("https://maven.terraformersmc.com/")
+    }
 }
 
 dependencies {
@@ -63,6 +70,9 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
     modImplementation("io.github.cottonmc:LibGui:${project.property("libgui_version")}")
+
+    modApi("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
 }
 
 tasks.processResources {
@@ -78,6 +88,7 @@ tasks.processResources {
             "loader_version" to project.property("loader_version"),
             "kotlin_loader_version" to project.property("kotlin_loader_version"),
             "fabric_version" to project.property("fabric_version"),
+            "cloth_config_version" to project.property("cloth_config_version"),
             "libgui_version" to project.property("libgui_version")
         )
     }

@@ -1,4 +1,8 @@
 {
+  "modmenu.nameTranslation.gamehelper": "Game Helper",
+  "modmenu.descriptionTranslation.gamehelper": "简单地修改游戏规则~",
+  "modmenu.summaryTranslation.gamehelper": "在世界中通过GUI修改游戏规则、启用调试功能以及查看死亡地点。",
+
   "gamehelper.screen.back_button": "返回",
   "gamehelper.screen.debugger_button": "调试",
   "gamehelper.screen.debugger_description": "在原版中展示更多信息。也许有用？",
@@ -23,5 +27,12 @@
   "gamehelper.screen.info_display.1": "你已在此特别的世界中生存了 %1$s ~",
   "gamehelper.screen.info_display.2": "你已在此危险的世界中死亡了 %1$s 次……",
   "gamehelper.screen.info_display.3": "你已在此甜蜜的世界中入眠了 %1$s 夜OvO",
+  "gamehelper.screen.config_screen_button": "GameHelper 配置",
+
+  "gamehelper.screen.config.title": "GameHelper 配置",
+  "gamehelper.screen.config.category.general": "总体",
+  "gamehelper.screen.config.entry.showGameruleTranslationInGUI": "在GUI中显示游戏规则翻译",
+  "gamehelper.screen.config.entry.showGameruleTranslationInGUI.description": "如果为 false，在GUI中显示游戏规则名，在工具提示中显示翻译文本；\n否则，在GUI中显示翻译文本，在工具提示中显示规则名。",
+
   "key.gamehelper.open_screen": "打开 GameHelper 屏幕"
 }
