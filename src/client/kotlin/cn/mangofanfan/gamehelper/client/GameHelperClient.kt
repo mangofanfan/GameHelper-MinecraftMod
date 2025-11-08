@@ -1,12 +1,17 @@
 package cn.mangofanfan.gamehelper.client
 
-import cn.mangofanfan.gamehelper.client.screen.ingame.widget.HelperDescription
+import cn.mangofanfan.gamehelper.client.handler.PlayerDeathHandler
+import cn.mangofanfan.gamehelper.client.screen.ingame.HelperDescription
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
+import cn.mangofanfan.gamehelper.packet.PlayerDeathS2CPayload
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
+import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -32,6 +37,18 @@ class GameHelperClient : ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register {
             while (keyBinding.wasPressed()) {
                 it.setScreen(InGameScreen(HelperDescription(it.currentScreen), it.currentScreen))
+            }
+        }
+
+        // 接收自定义数据包
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            ClientPlayNetworking.registerReceiver(PlayerDeathS2CPayload.Companion.id) { payload, context ->
+                logger.info("Received PlayerDeathS2CPayload: ${payload.world}(${payload.pos.x}, ${payload.pos.y}, ${payload.pos.z})")
+                context.player().sendMessage(
+                    Text.translatable("gamehelper.message.death_position", payload.world, payload.pos.x, payload.pos.y, payload.pos.z),
+                    false
+                )
+                PlayerDeathHandler.Companion.instance!!.addDeathPos(payload.pos, payload.world)
             }
         }
         logger.info("GamehelperClient init")

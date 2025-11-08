@@ -1,8 +1,6 @@
-package cn.mangofanfan.gamehelper.client.screen.config
+package cn.mangofanfan.gamehelper.config
 
 import com.google.gson.Gson
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.fabricmc.loader.api.FabricLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,9 +8,8 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 
-@Environment(EnvType.CLIENT)
 class ConfigManager {
-    val logger: Logger = LoggerFactory.getLogger("GameHelper ConfigManager")
+    private val logger: Logger = LoggerFactory.getLogger("GameHelper ConfigManager")
     val CONFIG_PATH: Path = FabricLoader.getInstance().configDir.resolve("gamehelper.json")
 
     class Config {
@@ -25,6 +22,10 @@ class ConfigManager {
          */
         var showGameruleTranslationInGUI = false
 
+        /**
+         * （单人游戏）在聊天和 GUI 中记录死亡坐标。默认为开。
+         */
+        var recordDeathPosition = true
     }
 
     var config: Config = Config()

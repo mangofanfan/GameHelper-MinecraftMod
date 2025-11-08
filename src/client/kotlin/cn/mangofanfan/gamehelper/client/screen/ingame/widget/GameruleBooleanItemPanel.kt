@@ -1,6 +1,8 @@
-package cn.mangofanfan.gamehelper.client.screen.ingame.libgui
+package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
-import cn.mangofanfan.gamehelper.client.screen.config.ConfigManager
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
+import cn.mangofanfan.gamehelper.config.ConfigManager
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
 import net.fabricmc.api.EnvType

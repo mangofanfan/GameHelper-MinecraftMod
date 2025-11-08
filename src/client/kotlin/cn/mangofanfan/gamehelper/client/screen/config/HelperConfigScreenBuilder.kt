@@ -1,5 +1,6 @@
 package cn.mangofanfan.gamehelper.client.screen.config
 
+import cn.mangofanfan.gamehelper.config.ConfigManager
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import me.shedaniel.clothconfig2.api.ConfigCategory
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder
@@ -20,10 +21,13 @@ class HelperConfigScreenBuilder(parent: Screen) {
     val configBuilder: ConfigBuilder = ConfigBuilder.create()
 
     /**
-     * 总配置类，由于只有一个所以实际不显示
+     * 总配置类
      */
-    val generalCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.general"))
-
+    val guiCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.gui"))
+    /**
+     * 单人游戏配置类
+     */
+    val playCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.play"))
     /**
      * ConfigEntryBuilder
      */
@@ -32,13 +36,22 @@ class HelperConfigScreenBuilder(parent: Screen) {
     init {
         configBuilder.title = Text.translatable("gamehelper.screen.config.title")
         configBuilder.parentScreen = parent
-        generalCategory.addEntry(
+        guiCategory.addEntry(
             entryBuilder.startBooleanToggle(
                 Text.translatable("gamehelper.screen.config.entry.showGameruleTranslationInGUI"),
                 manager.config.showGameruleTranslationInGUI)
                 .setDefaultValue(manager.config.showGameruleTranslationInGUI)
                 .setTooltip(Text.translatable("gamehelper.screen.config.entry.showGameruleTranslationInGUI.description"))
                 .setSaveConsumer { manager.config.showGameruleTranslationInGUI = it }
+                .build()
+        )
+        playCategory.addEntry(
+            entryBuilder.startBooleanToggle(
+                Text.translatable("gamehelper.screen.config.entry.recordDeathPosition"),
+                manager.config.recordDeathPosition)
+                .setDefaultValue(manager.config.recordDeathPosition)
+                .setTooltip(Text.translatable("gamehelper.screen.config.entry.recordDeathPosition.description"))
+                .setSaveConsumer { manager.config.recordDeathPosition = it }
                 .build()
         )
         configBuilder.setSavingRunnable { manager.saveConfig() }

@@ -21,7 +21,7 @@
       "cn.mangofanfan.gamehelper.client.GameHelperClient"
     ],
     "main": [
-      "cn.mangofanfan.gamehelper.Gamehelper"
+      "cn.mangofanfan.gamehelper.GameHelper"
     ],
     "modmenu": [
       "cn.mangofanfan.gamehelper.client.GameHelperModMenuApiImpl"
@@ -39,8 +39,14 @@
     "fabric-language-kotlin": ">=${kotlin_loader_version}",
     "fabric-api": ">=${fabric_version}",
     "fabric": "*",
-    "libgui": ">=${libgui_version}",
-    "cloth-config": ">=${cloth_config_version}",
     "minecraft": "${minecraft_version}"
+  },
+  "cloth-config": {
+    "version": ">=${cloth_config_version}",
+    "environment": "client"
+  },
+  "libgui": {
+    "version": ">=${libgui_version}",
+    "environment": "client"
   }
 }

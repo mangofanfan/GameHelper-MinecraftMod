@@ -28,11 +28,23 @@
   "gamehelper.screen.info_display.2": "You have experienced %1$s deaths in this dangerous world!",
   "gamehelper.screen.info_display.3": "You have passed %1$s on bed in this sweet world!",
   "gamehelper.screen.config_screen_button": "GameHelper config",
+  "gamehelper.screen.death_position.name": "[%1$s] Death at (%2$s, %3$s, %4$s)",
+  "gamehelper.screen.death_position.description": "Level/World: %1$s",
+  "gamehelper.screen.death_position.button": "Tp",
+  "gamehelper.screen.death_position.button.description": "Teleport to this position.\nNeed permission.",
+  "gamehelper.screen.death_position.del": "Del",
+  "gamehelper.screen.death_position.del.description": "Delete death position.",
+  "gamehelper.screen.death_position.deleted": "Deleted T-T",
+
+  "gamehelper.message.death_position": "[GameHelper] Your death position is:\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
 
   "gamehelper.screen.config.title": "GameHelper Config",
-  "gamehelper.screen.config.category.general": "General",
+  "gamehelper.screen.config.category.gui": "GUI",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI": "Show gamerule translation in GUI",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI.description": "If false, gamerule name in GUI and translation in tooltip.\nElse, gamerule name in tooltip and translation in GUI.",
+  "gamehelper.screen.config.category.play": "play",
+  "gamehelper.screen.config.entry.recordDeathPosition": "Record death position in Chat and GUI.",
+  "gamehelper.screen.config.entry.recordDeathPosition.description": "Not available in Multi Player (server) now.",
 
   "key.gamehelper.open_screen": "Open InGameHelper Screen"
 }

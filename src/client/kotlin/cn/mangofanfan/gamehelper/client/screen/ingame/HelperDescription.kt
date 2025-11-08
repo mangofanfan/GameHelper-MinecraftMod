@@ -1,10 +1,14 @@
-package cn.mangofanfan.gamehelper.client.screen.ingame.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame
 
+import cn.mangofanfan.gamehelper.client.handler.PlayerDeathHandler
+import cn.mangofanfan.gamehelper.client.handler.info.DeathPosition
 import cn.mangofanfan.gamehelper.client.screen.config.HelperConfigScreenBuilder
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
+import cn.mangofanfan.gamehelper.client.screen.ingame.widget.DeathPositionItemPanel
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
+import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -30,6 +34,11 @@ class HelperDescription(parent: Screen?) : LightweightGuiDescription() {
     val gamerulesButton = FButton(Text.translatable("gamehelper.screen.gamerules_button"))
     val debuggerButton = FButton(Text.translatable("gamehelper.screen.debugger_button"))
     val configScreenButton = FButton(Text.translatable("gamehelper.screen.config_screen_button"))
+    var deathPosListWidget: WListPanel<DeathPosition, DeathPositionItemPanel>? = null
+    val deathHandler = PlayerDeathHandler.Companion.instance!!
+    val deathConfigurator = { deathPosition: DeathPosition, itemPanel: DeathPositionItemPanel ->
+        itemPanel.deathPosition = deathPosition
+    }
 
     // 显示的信息条目
     var infoId = 0
@@ -70,12 +79,14 @@ class HelperDescription(parent: Screen?) : LightweightGuiDescription() {
         configScreenButton.setOnClick {
             _client!!.setScreen(HelperConfigScreenBuilder(_client.currentScreen!!).build())
         }
+        deathPosListWidget = WListPanel(deathHandler.deathPosList, ::DeathPositionItemPanel, deathConfigurator)
 
         root.add(backButton, 0, 0, 2, 1)
         root.add(infoDisplayButton, 2, 0, 16, 1)
-        root.add(gamerulesButton, 10, 2, 6, 1)
-        root.add(debuggerButton, 10, 3, 6, 1)
-        root.add(configScreenButton, 10, 10, 6, 1)
+        root.add(gamerulesButton, 13, 2, 4, 1)
+        root.add(debuggerButton, 13, 3, 4, 1)
+        root.add(configScreenButton, 13, 10, 4, 1)
+        root.add(deathPosListWidget, 0, 3, 12, 8)
 
         root.validate(this)
 

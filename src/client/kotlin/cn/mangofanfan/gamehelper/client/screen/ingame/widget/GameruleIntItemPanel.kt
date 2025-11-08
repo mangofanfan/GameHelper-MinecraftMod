@@ -1,6 +1,8 @@
-package cn.mangofanfan.gamehelper.client.screen.ingame.libgui
+package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
-import cn.mangofanfan.gamehelper.client.screen.config.ConfigManager
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
+import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
+import cn.mangofanfan.gamehelper.config.ConfigManager
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WTextField
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
@@ -44,10 +46,10 @@ class GameruleIntItemPanel : WPlainPanel()  {
             }
             try {
                 ruleValue = MinecraftClient.getInstance().server!!.gameRules.getInt(value)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 ruleValue = 10721
-                ruleIntField!!.setEditable(false)
-                button!!.setEnabled(false)
+                ruleIntField!!.isEditable = false
+                button!!.isEnabled = false
                 button!!.addTooltip(Text.translatable("gamehelper.screen.gamerules_tab.disabled_gamerule"))
             }
         }
@@ -57,7 +59,7 @@ class GameruleIntItemPanel : WPlainPanel()  {
         ruleNameLabel = FLabel(Text.literal("TvT"))
         ruleNameLabel!!.setVerticalAlignment(VerticalAlignment.CENTER)
         ruleIntField = WTextField()
-        ruleIntField!!.setMaxLength(10)
+        ruleIntField!!.maxLength = 10
         ruleIntField!!.text = "0"
         button = FButton(Text.translatable("gamehelper.screen.gamerules_tab.int.save"))
         button!!.setOnClick { onChanged() }
@@ -70,7 +72,7 @@ class GameruleIntItemPanel : WPlainPanel()  {
         try {
             ruleValue = ruleIntField!!.text.toInt()
             logger.info("Change gamerule ${rule!!.name} to $ruleValue")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ruleIntField!!.text = ruleValue.toString()
             logger.warn("Invalid number: ${ruleIntField!!.text}")
         }

@@ -1,4 +1,4 @@
-package cn.mangofanfan.gamehelper.client.screen.ingame.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame
 
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel

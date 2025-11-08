@@ -1,7 +1,7 @@
-package cn.mangofanfan.gamehelper.client.screen.ingame.widget
+package cn.mangofanfan.gamehelper.client.screen.ingame
 
-import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.GameruleBooleanItemPanel
-import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.GameruleIntItemPanel
+import cn.mangofanfan.gamehelper.client.screen.ingame.widget.GameruleBooleanItemPanel
+import cn.mangofanfan.gamehelper.client.screen.ingame.widget.GameruleIntItemPanel
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.WTabPanel
