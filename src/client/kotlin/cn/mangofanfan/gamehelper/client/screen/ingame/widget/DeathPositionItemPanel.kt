@@ -7,10 +7,13 @@ import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.minecraft.util.Colors
 
+@Environment(EnvType.CLIENT)
 class DeathPositionItemPanel: WPlainPanel() {
     var nameLabel: FLabel? = null
     var tpButton: FButton? = null
@@ -25,11 +28,13 @@ class DeathPositionItemPanel: WPlainPanel() {
             nameLabel!!.addTooltip(Text.translatable("gamehelper.screen.death_position.description", value.world))
             tpButton!!.setOnClick {
                 MinecraftClient.getInstance().networkHandler!!.sendChatCommand(
-                    "execute in ${deathPosition!!.world} at @s run tp ${deathPosition!!.pos.x} ${deathPosition!!.pos.y} ${deathPosition!!.pos.z}"
+                    "execute in ${deathPosition!!.world} run tp ${deathPosition!!.pos.x} ${deathPosition!!.pos.y} ${deathPosition!!.pos.z}"
                 )
             }
             delButton!!.setOnClick {
-                PlayerDeathHandler.Companion.instance!!.removeDeathPos(value)
+                try {
+                    PlayerDeathHandler.Companion.instance!!.removeDeathPos(value)
+                } catch (_: Exception) {}
                 nameLabel!!.text = Text.translatable("gamehelper.screen.death_position.deleted")
             }
             if (value.id % 2 != 0) {

@@ -27,7 +27,9 @@
   "gamehelper.screen.info_display.1": "你已在此特别的世界中生存了 %1$s ~",
   "gamehelper.screen.info_display.2": "你已在此危险的世界中死亡了 %1$s 次……",
   "gamehelper.screen.info_display.3": "你已在此甜蜜的世界中入眠了 %1$s 夜OvO",
-  "gamehelper.screen.config_screen_button": "GameHelper 配置",
+  "gamehelper.screen.config_screen_button": "配置",
+  "gamehelper.screen.death_position_clear_button": "清空所有死亡坐标",
+  "gamehelper.screen.death_position_clear_button.description": "如果你或你的服务器设置禁用了死亡坐标记录，则此列表将永远为空。",
   "gamehelper.screen.death_position.name": "[%1$s] 死亡 (%2$s, %3$s, %4$s)",
   "gamehelper.screen.death_position.description": "维度/世界：%1$s",
   "gamehelper.screen.death_position.button": "传送",
@@ -36,6 +38,7 @@
   "gamehelper.screen.death_position.del.description": "删除此死亡记录。",
   "gamehelper.screen.death_position.deleted": "删掉了 T-T",
 
+  "gamehelper.message.cloth_config_not_loaded": "[GameHelper] Cloth Config 未安装，无法打开配置屏幕。请安装后重新启动。",
   "gamehelper.message.death_position": "[GameHelper] 你的死亡坐标为：\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
 
   "gamehelper.screen.config.title": "GameHelper 配置",

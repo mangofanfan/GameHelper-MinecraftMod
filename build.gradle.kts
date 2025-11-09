@@ -77,7 +77,8 @@ dependencies {
     // Fabric API & Core Libraries (LibGui, Cloth Config)
     // 这些库通常有通用代码，应放在 modImplementation 中
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
-    modImplementation("io.github.cottonmc:LibGui:${project.property("libgui_version")}")
+    // 将libgui包含在本模组中
+    include("io.github.cottonmc:LibGui:${project.property("libgui_version")}")?.let { modImplementation(it) }
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
     modImplementation("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
 }

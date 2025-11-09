@@ -27,13 +27,6 @@
       "cn.mangofanfan.gamehelper.client.GameHelperModMenuApiImpl"
     ]
   },
-  "mixins": [
-    "gamehelper.mixins.json",
-    {
-      "config": "gamehelper.client.mixins.json",
-      "environment": "client"
-    }
-  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-language-kotlin": ">=${kotlin_loader_version}",
@@ -41,12 +34,10 @@
     "fabric": "*",
     "minecraft": "${minecraft_version}"
   },
-  "cloth-config": {
-    "version": ">=${cloth_config_version}",
-    "environment": "client"
+  "recommends": {
+    "cloth-config": ">=${cloth_config_version}"
   },
-  "libgui": {
-    "version": ">=${libgui_version}",
-    "environment": "client"
+  "suggests": {
+    "modmenu": "*"
   }
 }
