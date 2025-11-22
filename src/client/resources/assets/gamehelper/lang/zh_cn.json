@@ -32,14 +32,15 @@
   "gamehelper.screen.death_position_clear_button.description": "如果你或你的服务器设置禁用了死亡坐标记录，则此列表将永远为空。",
   "gamehelper.screen.death_position.name": "[%1$s] 死亡 (%2$s, %3$s, %4$s)",
   "gamehelper.screen.death_position.description": "维度/世界：%1$s",
-  "gamehelper.screen.death_position.button": "传送",
-  "gamehelper.screen.death_position.button.description": "传送至此位置。\n需要权限。",
+  "gamehelper.screen.death_position.tp.button": "传送",
+  "gamehelper.screen.death_position.tp.description": "传送至此位置。需要权限。",
   "gamehelper.screen.death_position.del": "删除",
   "gamehelper.screen.death_position.del.description": "删除此死亡记录。",
   "gamehelper.screen.death_position.deleted": "删掉了 T-T",
 
   "gamehelper.message.cloth_config_not_loaded": "[GameHelper] Cloth Config 未安装，无法打开配置屏幕。请安装后重新启动。",
-  "gamehelper.message.death_position": "[GameHelper] 你的死亡坐标为：\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
+  "gamehelper.message.death_position_text": "[GameHelper] 你的死亡坐标为：\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
+  "gamehelper.message.death_position_tp": "[GameHelper] 现在传送？",
 
   "gamehelper.screen.config.title": "GameHelper 配置",
   "gamehelper.screen.config.category.gui": "GUI",

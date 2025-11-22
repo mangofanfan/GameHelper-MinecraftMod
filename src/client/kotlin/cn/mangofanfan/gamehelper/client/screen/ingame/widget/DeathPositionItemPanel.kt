@@ -47,8 +47,8 @@ class DeathPositionItemPanel: WPlainPanel() {
         nameLabel = FLabel(Text.literal("poq"))
         nameLabel!!.setVerticalAlignment(VerticalAlignment.CENTER)
         nameLabel!!.setHorizontalAlignment(HorizontalAlignment.LEFT)
-        tpButton = FButton(Text.translatable("gamehelper.screen.death_position.button"))
-        tpButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.button.description"))
+        tpButton = FButton(Text.translatable("gamehelper.screen.death_position.tp.button"))
+        tpButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.tp.description"))
         delButton = FButton(Text.translatable("gamehelper.screen.death_position.del"))
         delButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.del.description"))
 

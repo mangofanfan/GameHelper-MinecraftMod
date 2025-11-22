@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "icon": "assets/gamehelper/icon.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
     "client": [
       "cn.mangofanfan.gamehelper.client.GameHelperClient"

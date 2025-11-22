@@ -13,6 +13,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
+import net.minecraft.text.ClickEvent
+import net.minecraft.text.HoverEvent
 import net.minecraft.text.Text
 import net.minecraft.util.Colors
 import org.lwjgl.glfw.GLFW
@@ -53,8 +55,19 @@ class GameHelperClient : ClientModInitializer {
             ClientPlayNetworking.registerReceiver(PlayerDeathS2CPayload.Companion.id) { payload, context ->
                 logger.info("Received PlayerDeathS2CPayload: ${payload.world}(${payload.pos.x}, ${payload.pos.y}, ${payload.pos.z})")
                 context.player().sendMessage(
-                    Text.translatable("gamehelper.message.death_position", payload.world, payload.pos.x, payload.pos.y, payload.pos.z)
+                    Text.translatable("gamehelper.message.death_position_text", payload.world, payload.pos.x, payload.pos.y, payload.pos.z)
                         .withColor(Colors.YELLOW),
+                    false
+                )
+                context.player().sendMessage(
+                    Text.translatable("gamehelper.message.death_position_tp")
+                        .styled { style -> style
+                            .withBold(true)
+                            .withColor(Colors.GREEN)
+                            .withUnderline(true)
+                            .withClickEvent(ClickEvent.RunCommand("/execute in ${payload.world} run tp ${payload.pos.x} ${payload.pos.y} ${payload.pos.z}"))
+                            .withHoverEvent(HoverEvent.ShowText(Text.translatable("gamehelper.screen.death_position.tp.description")))
+                        },
                     false
                 )
                 PlayerDeathHandler.Companion.instance!!.addDeathPos(payload.pos, payload.world)

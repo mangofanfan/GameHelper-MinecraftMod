@@ -32,14 +32,15 @@
   "gamehelper.screen.death_position_clear_button.description": "If you or your server configure disabling death position record, then nothing will be shown here.",
   "gamehelper.screen.death_position.name": "[%1$s] Death at (%2$s, %3$s, %4$s)",
   "gamehelper.screen.death_position.description": "Level/World: %1$s",
-  "gamehelper.screen.death_position.button": "Tp",
-  "gamehelper.screen.death_position.button.description": "Teleport to this position. Need permission.",
+  "gamehelper.screen.death_position.tp.button": "Tp",
+  "gamehelper.screen.death_position.tp.description": "Teleport to this position. Need permission.",
   "gamehelper.screen.death_position.del": "Del",
   "gamehelper.screen.death_position.del.description": "Delete death position.",
   "gamehelper.screen.death_position.deleted": "Deleted T-T",
 
   "gamehelper.message.cloth_config_not_loaded": "[GameHelper] Cloth Config NOT loaded. You can not open config screen. Please install it and restart.",
-  "gamehelper.message.death_position": "[GameHelper] Your death position is:\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
+  "gamehelper.message.death_position_text": "[GameHelper] Your death position is:\n%1$s(x=%2$s, y=%3$s, z=%4$s).",
+  "gamehelper.message.death_position_tp": "[GameHelper] Teleport now?",
 
   "gamehelper.screen.config.title": "GameHelper Config",
   "gamehelper.screen.config.category.gui": "GUI",

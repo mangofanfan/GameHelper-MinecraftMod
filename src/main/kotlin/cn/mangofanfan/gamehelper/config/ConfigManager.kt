@@ -23,7 +23,11 @@ class ConfigManager {
         var showGameruleTranslationInGUI = false
 
         /**
-         * （单人游戏）在聊天和 GUI 中记录死亡坐标。默认为开。
+         * 记录死亡坐标。默认为开。
+         *
+         * 在客户端的单人游戏中，这简单地决定了模组是否记录玩家的死亡地点；
+         *
+         * 在多人游戏中，需要服务器或主机打开此配置，服务端才会向各玩家发送死亡坐标；客户端也需要打开此配置，才能接收并在他们的游戏中显示死亡地点。
          */
         var recordDeathPosition = true
     }

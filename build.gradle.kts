@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.2.21"
-    id("fabric-loom") version "1.12-SNAPSHOT"
+    id("fabric-loom") version "1.13-SNAPSHOT"
     id("maven-publish")
 }
 
@@ -48,15 +48,8 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     maven {
-        name = "CottonMC"
-        url = uri("https://server.bbkr.space/artifactory/libs-release")
-    }
-    maven {
-        url = uri("https://maven.shedaniel.me/")
-    }
-    maven {
-        name = "Terraformers"
-        url = uri("https://maven.terraformersmc.com/")
+        name = "fanfan"
+        url = uri("https://maven.fanfan.moe/repository/maven-public/")
     }
 }
 
@@ -65,6 +58,8 @@ dependencies {
     // 🌐 通用依赖 (Common / src/main)
     // 客户端和服务器环境都需要的基础依赖，以及核心库
     // ----------------------------------------------------
+
+    implementation("cn.mangofanfan:tools:1.0-SNAPSHOT")
 
     // Minecraft & Mappings
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
