@@ -33,6 +33,12 @@ loom {
             sourceSet("client")
         }
     }
+
+    runs {
+        getByName("client") {
+            programArgs("--username", "Player114514")
+        }
+    }
 }
 
 fabricApi {
@@ -59,7 +65,7 @@ dependencies {
     // 客户端和服务器环境都需要的基础依赖，以及核心库
     // ----------------------------------------------------
 
-    implementation("cn.mangofanfan:tools:1.0-SNAPSHOT")
+    implementation("cn.mangofanfan:tools:1.0.5")
 
     // Minecraft & Mappings
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")

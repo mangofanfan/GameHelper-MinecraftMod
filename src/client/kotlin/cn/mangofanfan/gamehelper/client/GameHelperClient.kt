@@ -5,6 +5,7 @@ import cn.mangofanfan.gamehelper.client.screen.config.ClientStatus
 import cn.mangofanfan.gamehelper.client.screen.ingame.HelperDescription
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
 import cn.mangofanfan.gamehelper.packet.PlayerDeathS2CPayload
+import cn.mangofanfan.gamehelper.packet.PlayerDeathSyncS2CPayload
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -50,8 +51,10 @@ class GameHelperClient : ClientModInitializer {
             }
         }
 
-        // 注册接收自定义数据包
+        // 玩家加入世界或服务器时
+        // 注册接收到服务端死亡信息数据包行为
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            // 发送聊天文本，并将死亡信息添加到PlayerDeathHandler中
             ClientPlayNetworking.registerReceiver(PlayerDeathS2CPayload.Companion.id) { payload, context ->
                 logger.info("Received PlayerDeathS2CPayload: ${payload.world}(${payload.pos.x}, ${payload.pos.y}, ${payload.pos.z})")
                 context.player().sendMessage(
@@ -62,7 +65,6 @@ class GameHelperClient : ClientModInitializer {
                 context.player().sendMessage(
                     Text.translatable("gamehelper.message.death_position_tp")
                         .styled { style -> style
-                            .withBold(true)
                             .withColor(Colors.GREEN)
                             .withUnderline(true)
                             .withClickEvent(ClickEvent.RunCommand("/execute in ${payload.world} run tp ${payload.pos.x} ${payload.pos.y} ${payload.pos.z}"))
@@ -72,6 +74,17 @@ class GameHelperClient : ClientModInitializer {
                 )
                 PlayerDeathHandler.Companion.instance!!.addDeathPos(payload.pos, payload.world)
             }
+            // 同步服务器或存档中的死亡数据
+            ClientPlayNetworking.registerReceiver(PlayerDeathSyncS2CPayload.Companion.id) { payload, _ ->
+                logger.info("Received PlayerDeathSyncS2CPayload: ${payload.world}($payload.x, $payload.y, $payload.z)")
+                PlayerDeathHandler.Companion.instance!!.addDeathPos(payload.x, payload.y, payload.z, payload.world)
+            }
+        }
+
+        // 玩家退出世界或服务器时，让PlayerDeathHandler清空死亡信息
+        // 每次进入时都由服务端重新同步
+        ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
+            PlayerDeathHandler.Companion.instance!!.clearDeathPos()
         }
         logger.info("GamehelperClient init")
     }
