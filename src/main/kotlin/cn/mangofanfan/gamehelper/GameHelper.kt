@@ -2,9 +2,13 @@ package cn.mangofanfan.gamehelper
 
 import cn.mangofanfan.gamehelper.config.ConfigManager
 import cn.mangofanfan.gamehelper.data.DeathPositionDataManager
+import cn.mangofanfan.gamehelper.gamerules.GameRulesManager
 import cn.mangofanfan.gamehelper.packet.PlayerDeathS2CPayload
 import cn.mangofanfan.gamehelper.packet.PlayerDeathSyncS2CPayload
+import cn.mangofanfan.gamehelper.packet.RequestGameruleC2SPayload
 import cn.mangofanfan.gamehelper.packet.RequestResyncC2SPayload
+import cn.mangofanfan.gamehelper.packet.ResponseGameruleBooleanS2CPayload
+import cn.mangofanfan.gamehelper.packet.ResponseGameruleIntS2CPayload
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
@@ -22,10 +26,13 @@ class GameHelper : ModInitializer {
     override fun onInitialize() {
         // 服务器启动时注册服务端数据存储，服务器关闭时删除
         ServerLifecycleEvents.SERVER_STARTED.register {
-            server -> DeathPositionDataManager.Companion.create(server)
+            server ->
+            DeathPositionDataManager.Companion.create(server)
+            GameRulesManager.Builder.build(server.gameRules)
         }
         ServerLifecycleEvents.SERVER_STOPPING.register {
             DeathPositionDataManager.Companion.stop()
+            GameRulesManager.Builder.delete()
         }
 
         // 注册玩家登录时事件
@@ -46,11 +53,6 @@ class GameHelper : ModInitializer {
             }
         }
 
-        // 注册接收到客户端数据包时事件
-        ServerPlayNetworking.registerGlobalReceiver(RequestResyncC2SPayload.id) {
-            _, context -> DeathPositionDataManager.Companion.instance!!.sendSyncPacket(context.player())
-        }
-
         // 注册自定义数据包
         PayloadTypeRegistry.playS2C().register(
             PlayerDeathS2CPayload.Companion.id,
@@ -61,9 +63,33 @@ class GameHelper : ModInitializer {
             PlayerDeathSyncS2CPayload.Companion.CODEC
         )
         PayloadTypeRegistry.playC2S().register(
-            RequestResyncC2SPayload.id,
+            RequestResyncC2SPayload.ID,
             RequestResyncC2SPayload.CODEC
         )
+        PayloadTypeRegistry.playC2S().register(
+            RequestGameruleC2SPayload.Companion.id,
+            RequestGameruleC2SPayload.Companion.CODEC
+        )
+        PayloadTypeRegistry.playS2C().register(
+            ResponseGameruleBooleanS2CPayload.Companion.id,
+            ResponseGameruleBooleanS2CPayload.Companion.CODEC
+        )
+        PayloadTypeRegistry.playS2C().register(
+            ResponseGameruleIntS2CPayload.Companion.id,
+            ResponseGameruleIntS2CPayload.Companion.CODEC
+        )
+
+        // 注册接收到客户端数据包时事件
+        ServerPlayNetworking.registerGlobalReceiver(RequestResyncC2SPayload.ID) {
+            _, context ->
+            DeathPositionDataManager.Companion.instance!!.sendSyncPacket(context.player())
+        }
+        ServerPlayNetworking.registerGlobalReceiver(RequestGameruleC2SPayload.Companion.id) {
+            payload, context ->
+            val manager = GameRulesManager.Builder.instance!!
+            manager.respond(context.player(), payload.gameruleName!!)
+            logger.info("${context.player().name} requested gamerule ${payload.gameruleName}.")
+        }
     }
 
     private fun handlePlayerDeath(entity: ServerPlayerEntity, damageSource: DamageSource) {

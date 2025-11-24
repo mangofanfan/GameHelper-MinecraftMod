@@ -1,5 +1,6 @@
 package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
+import cn.mangofanfan.gamehelper.client.handler.GameRulesHandler
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
 import cn.mangofanfan.gamehelper.config.ConfigManager
@@ -8,16 +9,14 @@ import io.github.cottonmc.cotton.gui.widget.WTextField
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
-import net.minecraft.world.GameRules
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.IllegalArgumentException
 
 @Environment(EnvType.CLIENT)
 class GameruleIntItemPanel : WPlainPanel()  {
     val logger: Logger = LoggerFactory.getLogger("GameruleIntItemPanel")
+    val handler = GameRulesHandler.Companion.getInstance()
     var ruleNameLabel: FLabel? = null
     var ruleIntField: WTextField? = null
     var button: FButton? = null
@@ -25,32 +24,27 @@ class GameruleIntItemPanel : WPlainPanel()  {
         set(value) {
             if (field != null) {
                 // 初始化此Panel时当然不应该执行命令啦
-                MinecraftClient.getInstance().networkHandler!!.sendChatCommand(
-                    "gamerule ${rule!!.name} $value"
-                )
+                handler.changeGameRuleInSinglePlayer(rule!!, value!!)
             }
             field = value
             ruleIntField!!.text = value.toString()
         }
 
-    var rule: GameRules.Key<GameRules.IntRule>? = null
-        set(value) {
-            field = value
+    /**
+     * 游戏规则名，String。
+     */
+    var rule: String? = null
+        set(ruleName) {
+            field = ruleName
+            val ruleData = handler.intRuleMap[ruleName]!!
+            ruleValue = ruleData.value
             // 根据配置决定显示模式
             if (ConfigManager.getInstance().config.showGameruleTranslationInGUI) {
-                ruleNameLabel!!.text = Text.translatable(value!!.translationKey)
-                ruleNameLabel!!.addTooltip(Text.literal(value.name))
+                ruleNameLabel!!.text = Text.translatable(ruleData.translationKey)
+                ruleNameLabel!!.addTooltip(Text.literal(ruleName))
             } else {
-                ruleNameLabel!!.text = Text.literal(value!!.name)
-                ruleNameLabel!!.addTooltip(Text.translatable(value.translationKey))
-            }
-            try {
-                ruleValue = MinecraftClient.getInstance().server!!.gameRules.getInt(value)
-            } catch (_: IllegalArgumentException) {
-                ruleValue = 10721
-                ruleIntField!!.isEditable = false
-                button!!.isEnabled = false
-                button!!.addTooltip(Text.translatable("gamehelper.screen.gamerules_tab.disabled_gamerule"))
+                ruleNameLabel!!.text = Text.literal(ruleName)
+                ruleNameLabel!!.addTooltip(Text.translatable(ruleData.translationKey))
             }
         }
 
@@ -71,7 +65,7 @@ class GameruleIntItemPanel : WPlainPanel()  {
     fun onChanged() {
         try {
             ruleValue = ruleIntField!!.text.toInt()
-            logger.info("Change gamerule ${rule!!.name} to $ruleValue")
+            logger.debug("Change gamerule ${rule!!} to $ruleValue")
         } catch (_: Exception) {
             ruleIntField!!.text = ruleValue.toString()
             logger.warn("Invalid number: ${ruleIntField!!.text}")

@@ -14,6 +14,6 @@ class GameHelperModMenuApiImpl : ModMenuApi {
      */
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
         return ConfigScreenFactory { parent: Screen? ->
-            if (ClientStatus.Status.isClothConfigLoaded) HelperConfigScreenBuilder(parent!!).build() else null }
+            if (ClientStatus.isClothConfigLoaded) HelperConfigScreenBuilder(parent!!).build() else null }
     }
 }

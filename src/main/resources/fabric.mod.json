@@ -34,10 +34,8 @@
     "fabric": "*",
     "minecraft": "${minecraft_version}"
   },
-  "recommends": {
-    "cloth-config": ">=${cloth_config_version}"
-  },
   "suggests": {
-    "modmenu": "*"
+    "modmenu": "*",
+    "cloth-config": ">=${cloth_config_version}"
   }
 }

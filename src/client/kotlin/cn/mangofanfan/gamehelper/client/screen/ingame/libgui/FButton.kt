@@ -9,14 +9,15 @@ import net.minecraft.text.Text
 
 @Environment(EnvType.CLIENT)
 class FButton(translatable: MutableText) : WButton(translatable) {
-    var tooltipText: Text? = null
+    var tooltipTexts: ArrayList<Text> = ArrayList()
 
     fun addTooltip(text: Text) {
-        tooltipText = text
+        tooltipTexts.add(text)
     }
 
     override fun addTooltip(tooltip: TooltipBuilder?) {
-        if (tooltipText == null) return
-        tooltip?.add(tooltipText)
+        for (tooltipText in tooltipTexts) {
+            tooltip?.add(tooltipText)
+        }
     }
 }

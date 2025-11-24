@@ -2,7 +2,6 @@ package cn.mangofanfan.gamehelper.data
 
 import cn.mangofanfan.gamehelper.packet.PlayerDeathSyncS2CPayload
 import cn.mangofanfan.tools.file.FDirectory
-import cn.mangofanfan.tools.file.FFile
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
@@ -11,7 +10,7 @@ import net.minecraft.util.math.BlockPos
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class DeathPositionDataManager(val server: MinecraftServer) {
+class DeathPositionDataManager(server: MinecraftServer) {
     /**
      * 单例模式获取`DeathPositionDataManager`实例。
      */

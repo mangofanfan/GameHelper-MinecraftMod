@@ -35,7 +35,7 @@ class DeathPositionItemPanel: WPlainPanel() {
                 try {
                     PlayerDeathHandler.Companion.instance!!.removeDeathPos(value)
                 } catch (_: Exception) {}
-                nameLabel!!.text = Text.translatable("gamehelper.screen.death_position.deleted")
+                nameLabel!!.text = Text.translatable("gamehelper.screen.death_position.hidden")
             }
             if (value.id % 2 != 0) {
                 nameLabel!!.color = Colors.GRAY
@@ -49,8 +49,8 @@ class DeathPositionItemPanel: WPlainPanel() {
         nameLabel!!.setHorizontalAlignment(HorizontalAlignment.LEFT)
         tpButton = FButton(Text.translatable("gamehelper.screen.death_position.tp.button"))
         tpButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.tp.description"))
-        delButton = FButton(Text.translatable("gamehelper.screen.death_position.del"))
-        delButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.del.description"))
+        delButton = FButton(Text.translatable("gamehelper.screen.death_position.hide"))
+        delButton!!.addTooltip(Text.translatable("gamehelper.screen.death_position.hide.description"))
 
         add(nameLabel, 0, 0, 18*12, 18)
         add(tpButton, 18*7, 0, 18*2, 18)

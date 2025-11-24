@@ -60,28 +60,22 @@ repositories {
 }
 
 dependencies {
-    // ----------------------------------------------------
-    // 🌐 通用依赖 (Common / src/main)
-    // 客户端和服务器环境都需要的基础依赖，以及核心库
-    // ----------------------------------------------------
-
     implementation("cn.mangofanfan:tools:1.0.5")
 
-    // Minecraft & Mappings
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}:v2")
 
-    // Loaders (Fabric & Kotlin)
     modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
-
-    // Fabric API & Core Libraries (LibGui, Cloth Config)
-    // 这些库通常有通用代码，应放在 modImplementation 中
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
+
     // 将libgui包含在本模组中
-    include("io.github.cottonmc:LibGui:${project.property("libgui_version")}")?.let { modImplementation(it) }
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
-    modImplementation("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
+    val libguiVersion = project.property("libgui_version")
+    "modClientImplementation"("io.github.cottonmc:LibGui:${libguiVersion}")
+    include("io.github.cottonmc:LibGui:${libguiVersion}")
+
+    "modClientImplementation"("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
+    "modClientImplementation"("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
 }
 
 tasks.processResources {

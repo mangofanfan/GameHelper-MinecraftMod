@@ -1,5 +1,6 @@
 package cn.mangofanfan.gamehelper.client.screen.ingame.widget
 
+import cn.mangofanfan.gamehelper.client.handler.GameRulesHandler
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FLabel
 import cn.mangofanfan.gamehelper.config.ConfigManager
@@ -7,16 +8,15 @@ import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import net.minecraft.util.Colors
-import net.minecraft.world.GameRules
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @Environment(EnvType.CLIENT)
 class GameruleBooleanItemPanel : WPlainPanel() {
     val logger: Logger = LoggerFactory.getLogger("GameruleBooleanItemPanel")
+    val handler = GameRulesHandler.Companion.getInstance()
     var ruleNameLabel: FLabel? = null
     var ruleToggleButton: FButton? = null
     var ruleValue: Boolean? = null
@@ -25,9 +25,7 @@ class GameruleBooleanItemPanel : WPlainPanel() {
             // 花了好久好久才终于从源码里找到这个执行命令的方法！！理论上只要有权限，在单人游戏中和服务器里都可以执行~
             if (field != null) {
                 // 初始化此Panel时当然不应该执行命令啦
-                MinecraftClient.getInstance().networkHandler!!.sendChatCommand(
-                    "gamerule ${rule!!.name} ${if (value == true) "true" else "false"}"
-                )
+                handler.changeGameRuleInSinglePlayer(rule!!, value!!)
             }
             // TODO：检查命令是否执行成功，如果没有成功则不应该更改状态
             field = value
@@ -35,19 +33,22 @@ class GameruleBooleanItemPanel : WPlainPanel() {
                 .withColor(if (value == true) Colors.GREEN else Colors.RED)
         }
 
-    // 设置 gamerule
-    var rule: GameRules.Key<GameRules.BooleanRule>? = null
-        set(value) {
-            field = value
+    /**
+     * 游戏规则名，String。
+     */
+    var rule: String? = null
+        set(ruleName) {
+            field = ruleName
+            val ruleData = handler.booleanRuleMap[ruleName]!!
+            ruleValue = ruleData.value
             // 根据配置决定显示模式
             if (ConfigManager.getInstance().config.showGameruleTranslationInGUI) {
-                ruleNameLabel!!.text = Text.translatable(value!!.translationKey)
-                ruleNameLabel!!.addTooltip(Text.literal(value.name))
+                ruleNameLabel!!.text = Text.translatable(ruleData.translationKey)
+                ruleNameLabel!!.addTooltip(Text.literal(ruleName))
             } else {
-                ruleNameLabel!!.text = Text.literal(value!!.name)
-                ruleNameLabel!!.addTooltip(Text.translatable(value.translationKey))
+                ruleNameLabel!!.text = Text.literal(ruleName)
+                ruleNameLabel!!.addTooltip(Text.translatable(ruleData.translationKey))
             }
-            ruleValue = MinecraftClient.getInstance().server!!.gameRules.getBoolean(value)
         }
 
     init {
@@ -64,7 +65,7 @@ class GameruleBooleanItemPanel : WPlainPanel() {
     fun toggle() {
         if (ruleValue != null){
             ruleValue = !ruleValue!!
-            logger.info("Change gamerule ${rule!!.name} to $ruleValue")
+            logger.debug("Change gamerule ${rule!!} to $ruleValue")
         }
         else {
             logger.warn("Gamerule value is null?")
