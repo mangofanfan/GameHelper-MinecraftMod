@@ -22,9 +22,9 @@ class GameRulesManager(val gamerules: GameRules) {
             override fun <T : GameRules.Rule<T?>> visit(key: GameRules.Key<T?>, type: GameRules.Type<T?>) {
                 if (gameruleName == key.toString()) {
                     result = gamerules.get(key)
-                    when (result) {
-                        is GameRules.BooleanRule -> value = (result as GameRules.BooleanRule).get()
-                        is GameRules.IntRule -> value = (result as GameRules.IntRule).get()
+                    value = when (result) {
+                        is GameRules.BooleanRule -> (result as GameRules.BooleanRule).get()
+                        is GameRules.IntRule -> (result as GameRules.IntRule).get()
                         else -> throw RuntimeException("Unknown game rule value type: $result")
                     }
                     translationKey = key.translationKey
@@ -38,12 +38,19 @@ class GameRulesManager(val gamerules: GameRules) {
     /**
      * 回复玩家客户端发送的请求游戏规则的数据包。
      *
+     * 在本方法中完成回复数据包的发送。本方法无返回。
+     *
      * 接收数据包：
      * * [cn.mangofanfan.gamehelper.packet.RequestGameruleC2SPayload]
      *
      * 回复数据包：
      * * [ResponseGameruleBooleanS2CPayload]
      * * [ResponseGameruleIntS2CPayload]
+     *
+     * 特别的，如果[cn.mangofanfan.gamehelper.packet.RequestGameruleC2SPayload]的负载为`ALL`，则遍历所有的游戏规则并返回所有。
+     *
+     * @param player 服务端玩家实例，从`context.player`中获取。
+     * @param gameruleName 游戏规则名，[String]
      */
     fun respond(player: ServerPlayerEntity, gameruleName: String) {
         if (gameruleName == "ALL") {
