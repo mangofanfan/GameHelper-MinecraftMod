@@ -21,13 +21,13 @@ class HelperConfigScreenBuilder(parent: Screen) {
     val configBuilder: ConfigBuilder = ConfigBuilder.create()
 
     /**
-     * 总配置类
+     * GUI与单人游戏配置类
      */
-    val guiCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.gui"))
+    val singleplayerCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.singleplayer"))
     /**
-     * 单人游戏配置类
+     * 服务器与多人游戏配置类
      */
-    val playCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.play"))
+    val multiplayerCategory: ConfigCategory = configBuilder.getOrCreateCategory(Text.translatable("gamehelper.screen.config.category.multiplayer"))
     /**
      * ConfigEntryBuilder
      */
@@ -36,7 +36,12 @@ class HelperConfigScreenBuilder(parent: Screen) {
     init {
         configBuilder.title = Text.translatable("gamehelper.screen.config.title")
         configBuilder.parentScreen = parent
-        guiCategory.addEntry(
+        singleplayerCategory.addEntry(
+            entryBuilder.startTextDescription(
+                Text.translatable("gamehelper.screen.config.category.singleplayer.description")
+            ).build()
+        )
+        singleplayerCategory.addEntry(
             entryBuilder.startBooleanToggle(
                 Text.translatable("gamehelper.screen.config.entry.showGameruleTranslationInGUI"),
                 manager.config.showGameruleTranslationInGUI)
@@ -45,13 +50,45 @@ class HelperConfigScreenBuilder(parent: Screen) {
                 .setSaveConsumer { manager.config.showGameruleTranslationInGUI = it }
                 .build()
         )
-        playCategory.addEntry(
+        singleplayerCategory.addEntry(
+            entryBuilder.startBooleanToggle(
+                Text.translatable("gamehelper.screen.config.entry.showMoreInfoInGame"),
+                manager.config.showMoreInfoInGame)
+                .setDefaultValue(manager.config.showMoreInfoInGame)
+                .setTooltip(Text.translatable("gamehelper.screen.config.entry.showMoreInfoInGame.description"))
+                .setSaveConsumer { manager.config.showMoreInfoInGame = it }
+                .build()
+        )
+        multiplayerCategory.addEntry(
+            entryBuilder.startTextDescription(
+                Text.translatable("gamehelper.screen.config.category.multiplayer.description")
+            ).build()
+        )
+        multiplayerCategory.addEntry(
             entryBuilder.startBooleanToggle(
                 Text.translatable("gamehelper.screen.config.entry.recordDeathPosition"),
                 manager.config.recordDeathPosition)
                 .setDefaultValue(manager.config.recordDeathPosition)
                 .setTooltip(Text.translatable("gamehelper.screen.config.entry.recordDeathPosition.description"))
                 .setSaveConsumer { manager.config.recordDeathPosition = it }
+                .build()
+        )
+        multiplayerCategory.addEntry(
+            entryBuilder.startBooleanToggle(
+                Text.translatable("gamehelper.screen.config.entry.enableGameRulesManager"),
+                manager.config.enableGameRulesManager)
+                .setDefaultValue(manager.config.enableGameRulesManager)
+                .setTooltip(Text.translatable("gamehelper.screen.config.entry.enableGameRulesManager.description"))
+                .setSaveConsumer { manager.config.enableGameRulesManager = it }
+                .build()
+        )
+        multiplayerCategory.addEntry(
+            entryBuilder.startBooleanToggle(
+                Text.translatable("gamehelper.screen.config.entry.disableGameRulesForAnyone"),
+                manager.config.disableGameRulesForAnyone)
+                .setDefaultValue(manager.config.disableGameRulesForAnyone)
+                .setTooltip(Text.translatable("gamehelper.screen.config.entry.disableGameRulesForAnyone.description"))
+                .setSaveConsumer { manager.config.disableGameRulesForAnyone = it }
                 .build()
         )
         configBuilder.setSavingRunnable { manager.saveConfig() }

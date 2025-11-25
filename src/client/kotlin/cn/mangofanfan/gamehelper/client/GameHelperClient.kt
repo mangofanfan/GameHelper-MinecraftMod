@@ -57,6 +57,10 @@ class GameHelperClient : ClientModInitializer {
 
         // 玩家加入世界或服务器时
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            // 初始化handler
+            PlayerDeathHandler.Companion.build()
+            GameRulesHandler.Companion.build(MinecraftClient.getInstance().server)
+
             // 注册接收到服务端死亡信息数据包行为
             // 发送聊天文本，并将死亡信息添加到PlayerDeathHandler中
             ClientPlayNetworking.registerReceiver(PlayerDeathS2CPayload.Companion.id) { payload, context ->
@@ -87,7 +91,7 @@ class GameHelperClient : ClientModInitializer {
                     payload.y,
                     payload.z
                 )
-                PlayerDeathHandler.Companion.instance!!.addDeathPos(payload.x, payload.y, payload.z, payload.world)
+                PlayerDeathHandler.Companion.getInstance().addDeathPos(payload.x, payload.y, payload.z, payload.world)
             }
             // 同步服务器发送的游戏规则数据包
             ClientPlayNetworking.registerReceiver(ResponseGameruleBooleanS2CPayload.Companion.id) {payload, _ ->
@@ -98,15 +102,11 @@ class GameHelperClient : ClientModInitializer {
                 GameRulesHandler.Companion.getInstance().updateGameRuleInMultiPlayer(payload.gameruleName, payload.value, payload.translationKey)
                 logger.debug("Received ResponseGameruleIntS2CPayload: ${payload.gameruleName}=${payload.value}")
             }
-
-            // 初始化handler
-            GameRulesHandler.Companion.build(MinecraftClient.getInstance().server)
         }
 
-        // 玩家退出世界或服务器时，让PlayerDeathHandler清空死亡信息
-        // 每次进入时都由服务端重新同步
+        // 玩家退出世界或服务器时，删除一次性的有关实例。
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
-            PlayerDeathHandler.Companion.instance!!.clearDeathPos()
+            PlayerDeathHandler.Companion.delete()
             GameRulesHandler.Companion.delete()
         }
         logger.info("GamehelperClient init")

@@ -60,12 +60,20 @@
   "gamehelper.message.gamerules_handler.error.server_not_installed": "[GameHelper] Your server may not install GameHelper mod. Many helper features will be disabled.",
 
   "gamehelper.screen.config.title": "GameHelper Config",
-  "gamehelper.screen.config.category.gui": "GUI",
+  "gamehelper.screen.config.category.singleplayer": "GUI and singleplayer",
+  "gamehelper.screen.config.category.singleplayer.description": "These configs only work in singleplayer (client) for you own.",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI": "Show gamerule translation in GUI",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI.description": "If false, gamerule name in GUI and translation in tooltip.\nElse, gamerule name in tooltip and translation in GUI.",
-  "gamehelper.screen.config.category.play": "play",
-  "gamehelper.screen.config.entry.recordDeathPosition": "Record death position in Chat and GUI.",
-  "gamehelper.screen.config.entry.recordDeathPosition.description": "Not available in Multi Player (server) now.",
+  "gamehelper.screen.config.entry.showMoreInfoInGame": "Show more info in game",
+  "gamehelper.screen.config.entry.showMoreInfoInGame.description": "Mostly logging info in chat.",
+  "gamehelper.screen.config.category.multiplayer": "server and multiplayer",
+  "gamehelper.screen.config.category.multiplayer.description": "These configs work for any player when you host a server, including you in singleplayer.",
+  "gamehelper.screen.config.entry.recordDeathPosition": "Record death position.",
+  "gamehelper.screen.config.entry.recordDeathPosition.description": "Record death positions. Anybody can view them in their Helper GUI.",
+  "gamehelper.screen.config.entry.enableGameRulesManager": "Enable GameRulesManager",
+  "gamehelper.screen.config.entry.enableGameRulesManager.description": "GameRulesManager runs on server, responding player's request for gamerules.\nSo anybody can view them in their Helper GUI.\nNot affect your singleplayer.",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyone": "Disable GameRulesManager for anyone",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyone.description": "If true, server will only response gamerules requests only from player with permission, like OPs.",
 
   "key.gamehelper.open_screen": "Open InGameHelper Screen"
 }

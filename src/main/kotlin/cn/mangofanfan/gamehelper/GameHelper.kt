@@ -6,7 +6,7 @@ import cn.mangofanfan.gamehelper.gamerules.GameRulesManager
 import cn.mangofanfan.gamehelper.packet.PlayerDeathS2CPayload
 import cn.mangofanfan.gamehelper.packet.PlayerDeathSyncS2CPayload
 import cn.mangofanfan.gamehelper.packet.RequestGameruleC2SPayload
-import cn.mangofanfan.gamehelper.packet.RequestResyncC2SPayload
+import cn.mangofanfan.gamehelper.packet.RequestResyncDeathPositionsC2SPayload
 import cn.mangofanfan.gamehelper.packet.ResponseGameruleBooleanS2CPayload
 import cn.mangofanfan.gamehelper.packet.ResponseGameruleIntS2CPayload
 import net.fabricmc.api.ModInitializer
@@ -21,7 +21,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class GameHelper : ModInitializer {
-    val logger: Logger = LoggerFactory.getLogger("GameHelper")
+    private val logger: Logger = LoggerFactory.getLogger("GameHelper")
+    private val configManager = ConfigManager.getInstance()
 
     override fun onInitialize() {
         // 服务器启动时注册服务端数据存储，服务器关闭时删除
@@ -35,14 +36,10 @@ class GameHelper : ModInitializer {
             GameRulesManager.Builder.delete()
         }
 
-        // 注册玩家登录时事件
+        // 注册玩家加入时读取玩家死亡信息
         ServerPlayerEvents.JOIN.register {
             player ->
-            val manager = DeathPositionDataManager.Companion.instance!!
-            // 读取该玩家在本服务器/存档中的死亡记录
-            manager.readOrCreatePlayerDeathPositionData(player)
-            // 然后把它们发送给玩家
-            manager.sendSyncPacket(player)
+            DeathPositionDataManager.Companion.instance!!.readOrCreatePlayerDeathPositionData(player)
         }
 
         // 注册玩家死亡事件监听
@@ -63,8 +60,8 @@ class GameHelper : ModInitializer {
             PlayerDeathSyncS2CPayload.Companion.CODEC
         )
         PayloadTypeRegistry.playC2S().register(
-            RequestResyncC2SPayload.ID,
-            RequestResyncC2SPayload.CODEC
+            RequestResyncDeathPositionsC2SPayload.ID,
+            RequestResyncDeathPositionsC2SPayload.CODEC
         )
         PayloadTypeRegistry.playC2S().register(
             RequestGameruleC2SPayload.Companion.id,
@@ -80,21 +77,29 @@ class GameHelper : ModInitializer {
         )
 
         // 注册接收到客户端数据包时事件
-        ServerPlayNetworking.registerGlobalReceiver(RequestResyncC2SPayload.ID) {
+        ServerPlayNetworking.registerGlobalReceiver(RequestResyncDeathPositionsC2SPayload.ID) {
             _, context ->
-            DeathPositionDataManager.Companion.instance!!.sendSyncPacket(context.player())
+            if (configManager.config.recordDeathPosition) {
+                DeathPositionDataManager.Companion.instance!!.sendSyncPacket(context.player())
+            }
         }
         ServerPlayNetworking.registerGlobalReceiver(RequestGameruleC2SPayload.Companion.id) {
             payload, context ->
-            val manager = GameRulesManager.Builder.instance!!
-            manager.respond(context.player(), payload.gameruleName!!)
-            logger.info("${context.player().name} requested gamerule ${payload.gameruleName}.")
+            if (configManager.config.enableGameRulesManager) {
+                // 如果服务器设置了 disableGameRulesForAnyone，且该玩家权限不足，则忽略
+                if (configManager.config.disableGameRulesForAnyone && context.player().permissionLevel < 2) {
+                    return@registerGlobalReceiver
+                }
+                val manager = GameRulesManager.Builder.instance!!
+                manager.respond(context.player(), payload.gameruleName!!)
+                logger.info("${context.player().name} requested gamerule ${payload.gameruleName}.")
+            }
         }
     }
 
     private fun handlePlayerDeath(entity: ServerPlayerEntity, damageSource: DamageSource) {
         logger.info("Player ${entity.name} died at ${entity.blockPos} because of ${damageSource.name}.")
-        if (ConfigManager.getInstance().config.recordDeathPosition) {
+        if (configManager.config.recordDeathPosition) {
             ServerPlayNetworking.send(entity, PlayerDeathS2CPayload(
                 entity.blockPos,
                 entity.entityWorld.registryKey.value.toString()

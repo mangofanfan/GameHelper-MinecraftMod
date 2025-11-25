@@ -8,7 +8,7 @@ import cn.mangofanfan.gamehelper.client.screen.config.HelperConfigScreenBuilder
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.FButton
 import cn.mangofanfan.gamehelper.client.screen.ingame.libgui.InGameScreen
 import cn.mangofanfan.gamehelper.client.screen.ingame.widget.DeathPositionItemPanel
-import cn.mangofanfan.gamehelper.packet.RequestResyncC2SPayload
+import cn.mangofanfan.gamehelper.packet.RequestResyncDeathPositionsC2SPayload
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WListPanel
@@ -87,7 +87,10 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
         }
         gamerulesButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_description"))
         gamerulesResyncButton.setOnClick {
-            if (handler.isMultiplayer) handler.requestGameRulesInMultiPlayer()
+            if (handler.isMultiplayer) {
+                handler.requestGameRulesInMultiPlayer()
+                client!!.setScreen(null)
+            }
         }
         gamerulesResyncButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_resync_button.description"))
         if (handler.isMultiplayer)
@@ -125,7 +128,7 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
         deathPosSyncButton.addTooltip(Text.translatable("gamehelper.screen.death_position_sync_button.description.1"))
         deathPosSyncButton.addTooltip(Text.translatable("gamehelper.screen.death_position_sync_button.description.2"))
         deathPosSyncButton.setOnClick {
-            ClientPlayNetworking.send(RequestResyncC2SPayload)
+            ClientPlayNetworking.send(RequestResyncDeathPositionsC2SPayload)
             client!!.setScreen(parent)
             PlayerDeathHandler.Companion.instance!!.clearDeathPos()
         }

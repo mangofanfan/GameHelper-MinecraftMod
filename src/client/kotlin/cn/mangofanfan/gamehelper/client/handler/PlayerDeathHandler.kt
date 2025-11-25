@@ -1,8 +1,10 @@
 package cn.mangofanfan.gamehelper.client.handler
 
 import cn.mangofanfan.gamehelper.client.handler.info.DeathPosition
+import cn.mangofanfan.gamehelper.packet.RequestResyncDeathPositionsC2SPayload
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.util.math.BlockPos
 
 /**
@@ -27,6 +29,11 @@ class PlayerDeathHandler {
             return field
         }
 
+    init {
+        // 向服务端发送请求同步死亡信息的数据包
+        ClientPlayNetworking.send(RequestResyncDeathPositionsC2SPayload)
+    }
+
     fun addDeathPos(pos: BlockPos, world: String) {
         deathPosList.add(DeathPosition.Builder.build(pos, world))
     }
@@ -44,12 +51,25 @@ class PlayerDeathHandler {
     }
 
     object Companion {
+        @JvmField
         var instance: PlayerDeathHandler? = null
-            get() {
-                if (field == null) {
-                    field = PlayerDeathHandler()
-                }
-                return field
+
+        fun getInstance(): PlayerDeathHandler {
+            if (instance == null) {
+                throw RuntimeException("PlayerDeathHandler instance is null")
             }
+            return instance!!
+        }
+
+        fun build() : PlayerDeathHandler {
+            if (instance == null) {
+                instance = PlayerDeathHandler()
+            }
+            return instance!!
+        }
+
+        fun delete() {
+            instance = null
+        }
     }
 }

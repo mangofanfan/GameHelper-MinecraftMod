@@ -47,7 +47,7 @@ class DeathPositionDataManager(server: MinecraftServer) {
      */
     var deathPositionDirectory: FDirectory? = null
 
-    val logger: Logger = LoggerFactory.getLogger("DeathPositionDataManager")
+    private val logger: Logger = LoggerFactory.getLogger("DeathPositionDataManager")
 
     /**
      * 字典，存储玩家UUID与对应的`DeathPositionData`。

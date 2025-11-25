@@ -1,5 +1,6 @@
 package cn.mangofanfan.gamehelper.client.handler
 
+import cn.mangofanfan.gamehelper.config.ConfigManager
 import cn.mangofanfan.gamehelper.packet.RequestGameruleC2SPayload
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -43,6 +44,8 @@ class GameRulesHandler(val server: MinecraftServer?) {
 
     private val logger: Logger = LoggerFactory.getLogger(GameRulesHandler::class.java)
 
+    private val configManager = ConfigManager.getInstance()
+
     /**
      * 根据 [server] 是否为空，判断当前环境是否是多人游戏。
      */
@@ -55,17 +58,39 @@ class GameRulesHandler(val server: MinecraftServer?) {
         if (server == null && !client.isInSingleplayer) {
             requestGameRulesInMultiPlayer()
             logger.info("GameRulesHandler init in multiplayer")
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.1"), false)
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.2"), false)
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.3"), false)
+            if (configManager.config.showMoreInfoInGame) {
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.server.1"),
+                    false
+                )
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.server.2"),
+                    false
+                )
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.server.3"),
+                    false
+                )
+            }
         }
         // 如果在单人游戏中，则可以直接遍历 `server.gameRules` 获取所有的游戏规则
         else if (server != null && client.isInSingleplayer) {
             updateGameRulesInSinglePlayer(server)
             logger.info("GameRulesHandler init in singleplayer")
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.1"), false)
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.2"), false)
-            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.3"), false)
+            if (configManager.config.showMoreInfoInGame) {
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.client.1"),
+                    false
+                )
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.client.2"),
+                    false
+                )
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.init.client.3"),
+                    false
+                )
+            }
         }
         else {
             logger.error("GameRulesHandler init error")
@@ -116,7 +141,12 @@ class GameRulesHandler(val server: MinecraftServer?) {
     fun requestGameRulesInMultiPlayer() {
         ClientPlayNetworking.send(RequestGameruleC2SPayload("ALL"))
         logger.debug("Sent RequestGameruleC2SPayload(ALL)")
-        client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_server"), false)
+        if (configManager.config.showMoreInfoInGame) {
+            client.player!!.sendMessage(
+                Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_server"),
+                false
+            )
+        }
         CompletableFuture.supplyAsync({
             Thread.sleep(5000)
             return@supplyAsync !booleanRuleMap.isEmpty() && !intRuleMap.isEmpty()
@@ -131,10 +161,12 @@ class GameRulesHandler(val server: MinecraftServer?) {
             }
             else {
                 logger.info("Request gamerules successfully.")
-                client.player!!.sendMessage(
-                    Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_successfully"),
-                    false
-                )
+                if (configManager.config.showMoreInfoInGame) {
+                    client.player!!.sendMessage(
+                        Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_successfully"),
+                        false
+                    )
+                }
             }
         }, EXECUTOR)
     }
@@ -190,10 +222,12 @@ class GameRulesHandler(val server: MinecraftServer?) {
         when (value) {
             is Boolean -> {
                 booleanRuleMap[ruleName]?.value = value
+                println(ruleName)
                 runGameRuleCommand(ruleName, value)
             }
             is Int -> {
                 intRuleMap[ruleName]?.value = value
+                println(ruleName)
                 runGameRuleCommand(ruleName, value)
             }
             else -> throw RuntimeException("Unknown game rule value type: $value")

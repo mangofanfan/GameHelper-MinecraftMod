@@ -33,8 +33,6 @@ class GamerulesDescription: LightweightGuiDescription() {
     init {
         setRootPanel(root)
         root.setSize(256, 180)
-        println(handler.booleanRuleMap.keys)
-        println(handler.intRuleMap.keys)
         gamerulesBooleanListWidget = WListPanel(handler.booleanRuleMap.keys.toList(),
             ::GameruleBooleanItemPanel, gamerulesBooleanConfigurator)
         gamerulesBooleanListWidget!!.setListItemHeight(18)

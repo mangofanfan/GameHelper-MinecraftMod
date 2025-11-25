@@ -56,19 +56,20 @@ class GameRulesManager(val gamerules: GameRules) {
         if (gameruleName == "ALL") {
             gamerules.accept(object: GameRules.Visitor {
                 override fun <T : GameRules.Rule<T?>> visit(key: GameRules.Key<T?>, type: GameRules.Type<T?>) {
-                    val (value, key) = getValue(key.toString())
+                    val name = key.name
+                    val (value, translationKey) = getValue(name)
                     when (value) {
                         is Boolean -> {
                             ServerPlayNetworking.send(
-                                player, ResponseGameruleBooleanS2CPayload(key, value, key)
+                                player, ResponseGameruleBooleanS2CPayload(name, value, translationKey)
                             )
-                            logger.debug("Sent ResponseGameruleBooleanS2CPayload: ${key}=${value}")
+                            logger.debug("Sent ResponseGameruleBooleanS2CPayload: ${name}=${value}")
                         }
                         is Int -> {
                             ServerPlayNetworking.send(
-                                player, ResponseGameruleIntS2CPayload(key, value, key)
+                                player, ResponseGameruleIntS2CPayload(name, value, translationKey)
                             )
-                            logger.debug("Sent ResponseGameruleIntS2CPayload: ${key}=${value}")
+                            logger.debug("Sent ResponseGameruleIntS2CPayload: ${name}=${value}")
                         }
                     }
                 }

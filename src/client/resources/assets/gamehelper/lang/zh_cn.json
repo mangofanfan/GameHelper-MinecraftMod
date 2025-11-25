@@ -60,12 +60,21 @@
   "gamehelper.message.gamerules_handler.error.server_not_installed": "[GameHelper] 服务器似乎没有安装 GameHelper 模组，许多帮助功能将被禁用。",
 
   "gamehelper.screen.config.title": "GameHelper 配置",
-  "gamehelper.screen.config.category.gui": "GUI",
+  "gamehelper.screen.config.category.singleplayer": "GUI与单人游戏",
+  "gamehelper.screen.config.category.singleplayer.description": "这些设置只在单人游戏（客户端）中对你自己有效。",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI": "在GUI中显示游戏规则翻译",
   "gamehelper.screen.config.entry.showGameruleTranslationInGUI.description": "如果为 false，在GUI中显示游戏规则名，在工具提示中显示翻译文本；\n否则，在GUI中显示翻译文本，在工具提示中显示规则名。",
-  "gamehelper.screen.config.category.play": "游戏",
-  "gamehelper.screen.config.entry.recordDeathPosition": "在聊天和 GUI 中记录死亡坐标。",
-  "gamehelper.screen.config.entry.recordDeathPosition.description": "目前在多人游戏（服务器）中不可用。",
+  "gamehelper.screen.config.entry.showMoreInfoInGame": "在游戏中显示更多信息",
+  "gamehelper.screen.config.entry.showMoreInfoInGame.description": "主要是在聊天栏中的日志性文本。",
+  "gamehelper.screen.config.category.multiplayer": "服务器与多人游戏",
+  "gamehelper.screen.config.category.multiplayer.description": "这些设置在你开设的服务器中对所有人有效，包括单人游戏中的你自己，",
+  "gamehelper.screen.config.entry.recordDeathPosition": "记录死亡坐标。",
+  "gamehelper.screen.config.entry.recordDeathPosition.description": "记录死亡坐标，可在 Helper GUI 中查看。",
+  "gamehelper.screen.config.entry.enableGameRulesManager": "启用 GameRulesManager",
+  "gamehelper.screen.config.entry.enableGameRulesManager.description": "GameRulesManager 运行在服务端，回复所有玩家的游戏规则请求。\n所以任何人都可以在他们的 Helper GUI 中查看游戏规则。\n不影响你的单人游戏。",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyOne": "",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyOne.description": "",
+
 
   "key.gamehelper.open_screen": "打开 GameHelper 屏幕"
 }
