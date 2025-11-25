@@ -61,6 +61,7 @@ repositories {
 
 dependencies {
     implementation("cn.mangofanfan:tools:1.0.5")
+    include("cn.mangofanfan:tools:1.0.5")
 
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}:v2")
