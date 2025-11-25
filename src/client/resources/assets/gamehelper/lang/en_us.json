@@ -58,6 +58,7 @@
   "gamehelper.message.gamerules_handler.run.request_gamerules_server": "[GameHelper] Request ALL gamerules from server...",
   "gamehelper.message.gamerules_handler.run.request_gamerules_successfully": "[GameHelper] Request ALL gamerules successfully.",
   "gamehelper.message.gamerules_handler.error.server_not_installed": "[GameHelper] Your server may not install GameHelper mod. Many helper features will be disabled.",
+  "gamehelper.message.permission_denied": "[GameHelper] Permission denied.",
 
   "gamehelper.screen.config.title": "GameHelper Config",
   "gamehelper.screen.config.category.singleplayer": "GUI and singleplayer",

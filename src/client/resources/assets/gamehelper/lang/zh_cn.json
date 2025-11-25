@@ -58,6 +58,7 @@
   "gamehelper.message.gamerules_handler.run.request_gamerules_server": "[GameHelper] 从服务器请求全部游戏规则...",
   "gamehelper.message.gamerules_handler.run.request_gamerules_successfully": "[GameHelper] 成功从服务器请求全部规则。",
   "gamehelper.message.gamerules_handler.error.server_not_installed": "[GameHelper] 服务器似乎没有安装 GameHelper 模组，许多帮助功能将被禁用。",
+  "gamehelper.message.permission_denied": "[GameHelper] 权限不足。",
 
   "gamehelper.screen.config.title": "GameHelper 配置",
   "gamehelper.screen.config.category.singleplayer": "GUI与单人游戏",
@@ -72,8 +73,8 @@
   "gamehelper.screen.config.entry.recordDeathPosition.description": "记录死亡坐标，可在 Helper GUI 中查看。",
   "gamehelper.screen.config.entry.enableGameRulesManager": "启用 GameRulesManager",
   "gamehelper.screen.config.entry.enableGameRulesManager.description": "GameRulesManager 运行在服务端，回复所有玩家的游戏规则请求。\n所以任何人都可以在他们的 Helper GUI 中查看游戏规则。\n不影响你的单人游戏。",
-  "gamehelper.screen.config.entry.disableGameRulesForAnyOne": "",
-  "gamehelper.screen.config.entry.disableGameRulesForAnyOne.description": "",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyone": "对任何人禁用 GameRulesManager",
+  "gamehelper.screen.config.entry.disableGameRulesForAnyone.description": "如果启用，服务端只会回复拥有权限的玩家的游戏规则请求。例如 OP。",
 
 
   "key.gamehelper.open_screen": "打开 GameHelper 屏幕"

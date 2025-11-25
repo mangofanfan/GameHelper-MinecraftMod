@@ -17,6 +17,8 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
+import net.minecraft.util.Colors
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -88,6 +90,8 @@ class GameHelper : ModInitializer {
             if (configManager.config.enableGameRulesManager) {
                 // 如果服务器设置了 disableGameRulesForAnyone，且该玩家权限不足，则忽略
                 if (configManager.config.disableGameRulesForAnyone && context.player().permissionLevel < 2) {
+                    context.player().sendMessage(Text.translatable("gamehelper.message.permission_denied").withColor(
+                        Colors.YELLOW))
                     return@registerGlobalReceiver
                 }
                 val manager = GameRulesManager.Builder.instance!!
