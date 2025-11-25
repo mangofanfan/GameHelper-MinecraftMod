@@ -25,7 +25,7 @@ class GameruleBooleanItemPanel : WPlainPanel() {
             // 花了好久好久才终于从源码里找到这个执行命令的方法！！理论上只要有权限，在单人游戏中和服务器里都可以执行~
             if (field != null) {
                 // 初始化此Panel时当然不应该执行命令啦
-                handler.changeGameRuleInSinglePlayer(rule!!, value!!)
+                handler.changeGameRule(rule!!, value!!)
             }
             // TODO：检查命令是否执行成功，如果没有成功则不应该更改状态
             field = value

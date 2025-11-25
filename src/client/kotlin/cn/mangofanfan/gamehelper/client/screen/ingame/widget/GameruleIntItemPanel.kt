@@ -24,7 +24,7 @@ class GameruleIntItemPanel : WPlainPanel()  {
         set(value) {
             if (field != null) {
                 // 初始化此Panel时当然不应该执行命令啦
-                handler.changeGameRuleInSinglePlayer(rule!!, value!!)
+                handler.changeGameRule(rule!!, value!!)
             }
             field = value
             ruleIntField!!.text = value.toString()
