@@ -71,7 +71,7 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
         gamerulesButton.setOnClick {
             val handler = GameRulesHandler.Companion.getInstance()
             if (handler.booleanRuleMap.isEmpty() || handler.intRuleMap.isEmpty()) {
-                handler.updateGameRulesInMultiPlayer()
+                handler.requestGameRulesInMultiPlayer()
                 client!!.setScreen(null)
             }
             else {

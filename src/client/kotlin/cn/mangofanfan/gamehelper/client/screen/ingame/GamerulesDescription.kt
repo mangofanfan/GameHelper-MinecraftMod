@@ -9,7 +9,6 @@ import io.github.cottonmc.cotton.gui.widget.WTabPanel
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.text.Text
-import net.minecraft.world.GameRules
 
 /**
  * 在游戏内编辑gamerules的屏幕。

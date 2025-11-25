@@ -6,9 +6,13 @@ import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.MinecraftClient
 import net.minecraft.server.MinecraftServer
+import net.minecraft.text.Text
+import net.minecraft.util.Colors
 import net.minecraft.world.GameRules
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 /**
  * **客户端专属的 Handler**。
@@ -24,7 +28,7 @@ import org.slf4j.LoggerFactory
  * 如果为空，则假定为多人游戏模式并从服务器请求游戏规则数据。
  */
 @Environment(EnvType.CLIENT)
-class GameRulesHandler(server: MinecraftServer?) {
+class GameRulesHandler(val server: MinecraftServer?) {
     /**
      * 布尔值类型游戏规则存储字典
      */
@@ -39,16 +43,29 @@ class GameRulesHandler(server: MinecraftServer?) {
 
     private val logger: Logger = LoggerFactory.getLogger(GameRulesHandler::class.java)
 
+    /**
+     * 根据 [server] 是否为空，判断当前环境是否是多人游戏。
+     */
+    val isMultiplayer: Boolean = server != null
+
+    private val EXECUTOR = Executors.newSingleThreadExecutor()
+
     init {
         // 如果当前正在服务器/多人游戏中游玩，则需要向服务端发送请求获取游戏规则。
         if (server == null && !client.isInSingleplayer) {
-            updateGameRulesInMultiPlayer()
+            requestGameRulesInMultiPlayer()
             logger.info("GameRulesHandler init in multiplayer")
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.1"), false)
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.2"), false)
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.server.3"), false)
         }
         // 如果在单人游戏中，则可以直接遍历 `server.gameRules` 获取所有的游戏规则
         else if (server != null && client.isInSingleplayer) {
             updateGameRulesInSinglePlayer(server)
             logger.info("GameRulesHandler init in singleplayer")
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.1"), false)
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.2"), false)
+            client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.init.client.3"), false)
         }
         else {
             logger.error("GameRulesHandler init error")
@@ -64,7 +81,7 @@ class GameRulesHandler(server: MinecraftServer?) {
      *
      * 需要传入[MinecraftServer]实例。
      *
-     * 由于多人游戏中无法从[MinecraftClient]实例获取[MinecraftServer]实例，因此在多人游戏/服务器环境中需使用[updateGameRulesInMultiPlayer]。
+     * 由于多人游戏中无法从[MinecraftClient]实例获取[MinecraftServer]实例，因此在多人游戏/服务器环境中需使用[requestGameRulesInMultiPlayer]。
      */
     fun updateGameRulesInSinglePlayer(server: MinecraftServer) {
         server.gameRules.accept(object: GameRules.Visitor {
@@ -91,10 +108,49 @@ class GameRulesHandler(server: MinecraftServer?) {
     /**
      * 在多人游戏中，使用此方法向服务端发送数据包以请求发送全部游戏规则，然后由服务端发送游戏规则信息。
      *
-     * 此方法在单人游戏中也可行，但没有必要，因为单人游戏可以直接获取到[MinecraftServer]实例，参见[updateGameRulesInSinglePlayer]方法。
+     * 同时，如果在五秒之内没有收到服务端的回复，则视作服务端缺少 GameHelper 的游戏规则功能，并在客户端给出警告。
+     *
+     * 此方法在单人游戏中也可行，但没有必要，因为单人游戏无需额外检查服务端模组在是否安装、
+     * 也可以直接获取到[MinecraftServer]实例，参见[updateGameRulesInSinglePlayer]方法。
      */
-    fun updateGameRulesInMultiPlayer() {
+    fun requestGameRulesInMultiPlayer() {
         ClientPlayNetworking.send(RequestGameruleC2SPayload("ALL"))
+        logger.debug("Sent RequestGameruleC2SPayload(ALL)")
+        client.player!!.sendMessage(Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_server"), false)
+        CompletableFuture.supplyAsync({
+            Thread.sleep(5000)
+            return@supplyAsync !booleanRuleMap.isEmpty() && !intRuleMap.isEmpty()
+        }, EXECUTOR).thenAcceptAsync({ success ->
+            if (!success) {
+                logger.warn("Request gamerules timeout. Your server may not have GameHelper mod installed.")
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.error.server_not_installed")
+                        .withColor(Colors.YELLOW),
+                    false
+                )
+            }
+            else {
+                logger.info("Request gamerules successfully.")
+                client.player!!.sendMessage(
+                    Text.translatable("gamehelper.message.gamerules_handler.run.request_gamerules_successfully"),
+                    false
+                )
+            }
+        }, EXECUTOR)
+    }
+
+    /**
+     * 在多人游戏中，使用此方法向服务端发送数据包以请求发送指定的游戏规则`gameruleName`。
+     *
+     * 根据请求的游戏规则的类型，服务端将回复包含游戏规则的数据包之一：
+     * * [cn.mangofanfan.gamehelper.packet.ResponseGameruleIntS2CPayload]
+     * * [cn.mangofanfan.gamehelper.packet.ResponseGameruleBooleanS2CPayload]
+     *
+     * 这将被在[cn.mangofanfan.gamehelper.client.GameHelperClient]中注册的数据包Receiver自动处理，然后在本 Handler 中更新。
+     */
+    fun requestGameRuleInMultiPlayer(gameruleName: String) {
+        ClientPlayNetworking.send(RequestGameruleC2SPayload(gameruleName))
+        logger.debug("Sent RequestGameruleC2SPayload($gameruleName)")
     }
 
     /**
@@ -142,6 +198,8 @@ class GameRulesHandler(server: MinecraftServer?) {
             }
             else -> throw RuntimeException("Unknown game rule value type: $value")
         }
+        // 如果是多人游戏，则重新向服务器请求新的游戏规则，确保同步
+        if (server != null) requestGameRuleInMultiPlayer(ruleName)
         logger.info("Change gamerule $ruleName to $value")
     }
 
