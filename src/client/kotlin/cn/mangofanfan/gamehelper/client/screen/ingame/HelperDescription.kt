@@ -36,6 +36,7 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
     val backButton = FButton(Text.translatable("gamehelper.screen.back_button"))
     val infoDisplayButton = FButton(Text.translatable("gamehelper.screen.info_display.0"))
     val gamerulesButton = FButton(Text.translatable("gamehelper.screen.gamerules_button"))
+    val gamerulesResyncButton = FButton(Text.translatable("gamehelper.screen.gamerules_resync_button"))
     val debuggerButton = FButton(Text.translatable("gamehelper.screen.debugger_button"))
     val configScreenButton = FButton(Text.translatable("gamehelper.screen.config_screen_button"))
     val deathPosClearButton = FButton(Text.translatable("gamehelper.screen.death_position_clear_button"))
@@ -49,7 +50,9 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
     // 显示的信息条目
     var infoId = 0
 
-    val logger: Logger = LoggerFactory.getLogger("InGameHelper")
+    private val logger: Logger = LoggerFactory.getLogger("InGameHelper")
+
+    private val handler = GameRulesHandler.Companion.getInstance()
 
     /**
      * 用于语义化统计信息中的游戏时间的formatter
@@ -69,7 +72,6 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
             nextInfoDisplay()
         }
         gamerulesButton.setOnClick {
-            val handler = GameRulesHandler.Companion.getInstance()
             if (handler.booleanRuleMap.isEmpty() || handler.intRuleMap.isEmpty()) {
                 handler.requestGameRulesInMultiPlayer()
                 client!!.setScreen(null)
@@ -84,6 +86,16 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
             }
         }
         gamerulesButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_description"))
+        gamerulesResyncButton.setOnClick {
+            if (handler.isMultiplayer) handler.requestGameRulesInMultiPlayer()
+        }
+        gamerulesResyncButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_resync_button.description"))
+        if (handler.isMultiplayer)
+            gamerulesResyncButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_resync_button.description.server"))
+        else {
+            gamerulesResyncButton.addTooltip(Text.translatable("gamehelper.screen.gamerules_resync_button.description.client"))
+            gamerulesResyncButton.isEnabled = false
+        }
         debuggerButton.setOnClick {
             client!!.setScreen(InGameScreen(
                 DebuggerDescription(),
@@ -121,6 +133,7 @@ class HelperDescription(val parent: Screen?) : LightweightGuiDescription() {
         root.add(backButton, 0, 0, 2, 1)
         root.add(infoDisplayButton, 2, 0, 16, 1)
         root.add(gamerulesButton, 13, 2, 4, 1)
+        root.add(gamerulesResyncButton, 17, 2, 1, 1)
         root.add(debuggerButton, 13, 3, 4, 1)
         root.add(configScreenButton, 13, 10, 4, 1)
         root.add(deathPosClearButton, 0, 2, 6, 1)

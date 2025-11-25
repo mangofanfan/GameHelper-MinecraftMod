@@ -46,7 +46,7 @@ class GameRulesHandler(val server: MinecraftServer?) {
     /**
      * 根据 [server] 是否为空，判断当前环境是否是多人游戏。
      */
-    val isMultiplayer: Boolean = server != null
+    val isMultiplayer: Boolean = server == null
 
     private val EXECUTOR = Executors.newSingleThreadExecutor()
 
